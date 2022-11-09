@@ -1,3 +1,21 @@
+% Author: O. Sowatzke
+%
+% Modified: 11/25/2022
+%
+% Subject: Function generates and plots the RDM for a radar system using
+% stretch processing. Windows and amplitude correction can be configured
+% for different scenarios.
+%
+% Inputs:
+%       R                       Nx1 vector of target ranges (m)
+%       v                       Nx1 vector of target velocities (m/s)
+%       RCS                     Nx1 vector of target RCS (m^2)
+%       thermal_noise_power     Normalized thermal noise power expressed in
+%                               units of ((4*pi)^3)/(Pt*G^2*lambda^2)
+%       en_range_win            Enable FFT window for range FFT
+%       en_amp_corr             Enable R^2 Amplitude Compensation
+%       en_dopp_win             Enable FFT window for doppler FFT
+%
 function generate_rdm(R,v,RCS,thermal_noise_power,en_range_win,en_amp_corr,en_dopp_win)
     
     % generate received data cube
