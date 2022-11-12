@@ -13,19 +13,16 @@ classdef radar < handle
         f_c = 77e9;
 
         % chirp starting frequency (Hz)
-        f_start = 76.8e9;
+        f_start = 77.2e9;
 
         % chirp ending frequency (Hz)
-        f_stop = 77.2e9;
+        f_stop = 76.8e9;
 
         % pulse repetition interval (s)
         PRI = 30e-6;
 
         % Chip pulse width (s)
         P_T = 20e-6;
-
-        % fast time samples
-        M = 400;
 
         % number of chips
         K = 500;
@@ -35,6 +32,11 @@ classdef radar < handle
 
         % light speed (m/s)
         c = 3e8;
+
+        % enable fft shift
+        % 0 => v_int = [0 vua)
+        % 1 => v_int = [-vua/2 vua)
+        en_fft_shift = 1;
     end
 
     % private properties
@@ -103,6 +105,21 @@ classdef radar < handle
             y = self.c*dt/2;
         end
 
+        % velocity step size corresponding to a doppler bin (m/s)
+        function y = vs(self)
+            
+            % compute width of each doppler bin
+            Fd = 1/(self.PRI*self.K);
+
+            % convert to velocity
+            y = Fd*self.lambda/2;
+        end
+
+        % wavelength (m)
+        function y = lambda(self)
+            y = self.c/self.f_c;
+        end
+
         % unambiguous range (m)
         function y = Rua(self)
 
@@ -112,6 +129,17 @@ classdef radar < handle
 
             % compute unambiguous range
             y = self.c*t/2;
+        end
+
+        % unambiguous velocity (m/s)
+        function y = vua(self)
+            y = self.lambda/(2*self.PRI);
+        end
+
+        % size of data cube along fast time axis
+        function y = M(self)
+
+            y = round(self.P_T*self.f_s);
         end
 
         % Function generates and plots the RDM for a radar system using
@@ -140,22 +168,8 @@ classdef radar < handle
             % get location of each target in RDM
             self.find_rdm_peaks;
 
-            % plot rdm
-            figure;
-            m = mesh(db(self.rdm),'FaceColor','flat');
-            view(2);
-
-            % mark each of the peaks
-            for i = 1:length(self.range_gate)
-                datatip(m, self.dopp_bin(i), self.range_gate(i));
-            end
-
-            % scale axis
-            colorbar;
-        
-            % label plot
-            xlabel('Doppler Bin');
-            ylabel('Range Gate');
+            % plot resulting rdm
+            self.plot_rdm;
         end
     end
 
@@ -167,31 +181,54 @@ classdef radar < handle
         % stretch processing
         function simulate_received(self)
 
-            % timestep (s)
-            dt = 1/self.f_s;
-        
             % generate thermal noise for each data cube sample
             thermal_noise = normrnd(0,1,self.M,self.K) + ...
                 1i.*normrnd(0,1,self.M,self.K);
-        
             thermal_noise = thermal_noise*sqrt(self.thermal_noise_power);
-        
-            % compute frequency offet due to target range
-            f_r = 2*self.R/self.c*(self.f_start - self.f_stop)/self.P_T;
-        
-            % frequency offset due to doppler shift
-            f_d = 2*self.v*self.f_c/self.c;
-        
-            % array of times in (s)
-            t = 0:dt:dt*(self.PRI*self.f_s*self.K-1);
-        
-            % generate received signal
-            received = (sqrt(self.RCS)./(self.R.^2))'...
-                *exp(1i.*2.*pi.*(f_r + f_d)*t);
-        
-            % generate datacube
-            reshape_received = reshape(received,self.PRI*self.f_s,self.K);
-            received = reshape_received(1:self.M,:);
+            
+            % compute frequency offet due to target range (Hz)
+            f_r = 2*self.R/self.c*(self.f_start-self.f_stop)/self.P_T;
+
+            % frequency offset due to doppler shift (Hz)
+            f_d = 2*self.v/self.lambda;
+            
+            % PRI lengthS in samples
+            pri_len = round(self.PRI*self.f_s);
+
+            % compute amplitude of each target return
+            %   Pr = (Pt*G^2*lambda^2*RCS)/((4*pi)^3*R^4)
+            %
+            % equation assumes:
+            %   (Pt*G^2*lambda^2)/((4*pi)^3) = 1
+            %
+            amp = ((sqrt(self.RCS))./((self.R).^2));
+
+            % timestep (s)
+            dt = 1/self.f_s;
+
+            % time axis for a pulse (s)
+            t_pulse=dt*(0:(pri_len-1));
+
+            % time axis for a cpi (s)
+            t_cpi=dt*(0:(pri_len*self.K-1));
+
+            % compute return of target due to range effects only
+            % repeats each pulse due to indentical transmit signal
+            rec1 = repmat(exp(1i*2*pi*f_r.*t_pulse),1,self.K);
+
+            % compute doppler shift of each target return
+            % complex exponential operates over full CPI
+            % produce doppler shift and range-doppler coupling
+            rec2 = exp(1i*2*pi*f_d.*t_cpi);
+
+            % compute overall return using superposition of each target return
+            rec3 = sum(amp.*rec1.*rec2,1);
+
+            % compute data cube due to signal returns only
+            received = reshape(rec3,pri_len,self.K);
+            received = received(1:self.M,:);
+
+            % compute total received data cube (signal + noise)
             self.data_cube = received+thermal_noise;
         end
 
@@ -263,15 +300,68 @@ classdef radar < handle
             Ra = mod(R_adj, self.Rua);
 
             % quantize to a range gate
-            % add one to produce MATLAB indexing
-            self.range_gate = mod(round(Ra/self.Rs),self.M) + 1;
+            self.range_gate = mod(round(Ra/self.Rs),self.M);
 
             % normalized frequency fd/PRF
-            fnorm = mod(fd*CONSTANTS.PRI,1);
+            fnorm = mod(fd*self.PRI,1);
 
             % doppler shift due to frequency offset
-            % add one to produce MATLAB indexing
-            self.dopp_bin = mod(round(fnorm*CONSTANTS.K),CONSTANTS.K) + 1;
+            self.dopp_bin = mod(round(fnorm*self.K),self.K);
+        end
+
+        % plot rdm and mark target returns
+        function plot_rdm(self)
+
+            % range axis
+            raxis = self.Rs*(0:(self.M-1));
+
+            % velocity axis
+            % [0, vua) is default unambiguous velocity interval
+            vaxis = self.vs*(0:(self.K-1));
+
+            % for [-vua/2, vua/2) unambiguous velocity interval
+            if self.en_fft_shift
+                vaxis = vaxis - self.vua/2;
+            end
+
+            % generate RDM for plotting
+            % [0, vua) is default unambiguous velocity interval
+            rdm_plot = 20*log10(abs(self.rdm));
+
+            % for [-vua/2, vua/2) unambiguous velocity interval
+            if self.en_fft_shift
+                rdm_plot = fftshift(rdm_plot,2);
+            end
+
+            % plot rdm
+            figure;
+            m = mesh(vaxis,raxis,rdm_plot,'FaceColor','flat');
+            view(2);
+
+            % compute measured range and velocity of each target
+            % [0, vua) is default unambiguous velocity interval
+            vm = self.vs*self.dopp_bin;
+            Rm = self.Rs*self.range_gate;
+
+            % for [-vua/2, vua/2) unambiguous velocity interval
+            if self.en_fft_shift
+                vm = vm - self.vua*(vm >= (self.vua/2));
+            end
+
+            % mark each of the peaks
+            for i = 1:length(self.range_gate)
+                datatip(m, vm(i), Rm(i));
+            end
+
+            xlim([vaxis(1) vaxis(end)])
+            ylim([raxis(1) raxis(end)])
+
+            % scale axis
+            colorbar;
+        
+            % label plot
+            xlabel('Velocity (m/s)')
+            ylabel('Range (m)')
         end
     end
 end
