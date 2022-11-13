@@ -25,14 +25,20 @@ osowatzke@arizona.edu}}
 \maketitle
 
 \begin{abstract}
-The range resolution of a radar system is inversely proportional to the bandwidth of its transmitted waveform. To achieve a fine range resolution, a high bandwidth waveform is required. This typically results in an increased ADC sampling rate, which leads to higher production costs. A linear frequency modulated (LFM) waveform can be used in conjunction with stretch processing to provide a large transmitted waveform bandwidth with a reduced ADC sampling rate. This leads to reduced production costs and increased consumer availability.   
+The range resolution of a radar system is inversely proportional to the bandwidth of its transmitted waveform. To achieve a fine range resolution, a high bandwidth waveform is required. This typically results in an increased ADC sampling rate, which leads to higher production costs. A linear frequency modulated (LFM) waveform can be used in conjunction with stretch processing to provide a large transmitted waveform bandwidth with a reduced ADC sampling rate. This leads to a fine range resolution at reduced production costs. This document provides an overview of an LFM radar system with a focus on the signal processing. It specifically examines the generation of range doppler matrices (RDMs) using range and doppler compression. The effects of amplitude compensation, range windowing, and doppler windowing are also be examined. Finally, the measurement limitations of the LFM radar system are examined and methods for improving these limitations are discussed. 
+%Specifically, the role of range and doppler compression in creating Range Doppler Matrices (RDMs).
 %The range resolution of a rectangular pulse is inversely proportional to the length of the rectangular pulse. Therefore, to achieve fine range resolution, a short rectangular pulse is required. However, decreasing the pulse length also leads to a reduction in SNR. Pulse compression waveform seek to decouple pulse length from range resolution and in turn make it possible to simultaneously achieve fine range resolution and a high SNR. One common pulse compression waveform is a linear frequency modulated (LFM) waveform. This document simulates the matched filer response of an LFM waveform and examines the resulting SNR and range resolution.
 \end{abstract}
 
 \begin{IEEEkeywords}
-Pulse Compression, Linear Frequency Modulated (LFM) Waveform, Matched Filter, SNR, Range Resolution
+%Pulse Compression, Linear Frequency Modulated (LFM) Waveform, Matched Filter, SNR, Range Resolution
 \end{IEEEkeywords}
 \section{Introduction}
+\section{Range and Doppler Compression}
+\section{Amplitude Compensation}
+\section{Range and Doppler Windowing}
+\section{Measurement Limitations}
+\section{Conclusion}
 %A linear frequency modulated (LFM) waveform is a pulse compression waveform defined by the following equation:
 %\begin{equation}
 %x(t)=e^{j\pi\beta t^2/\tau}
