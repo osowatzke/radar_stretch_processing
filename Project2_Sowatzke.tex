@@ -89,16 +89,37 @@ Fast Time Samples & 400 \\
 \hline 
 Number of Chirps & 500 \\
 \hline
-PRF & 50 kHz \\
-\hline
-Duty Cycle & 20\% \\
-\hline
 Fast Time Sampling Frequency & 20 MHz \\
 \hline
 \end{tabularx}
 \end{table}
 \noindent
+Vectors of ADC samples corresponding to a PRI can be stacked along the slow-time axis to form a data cube. Note that the pulse return will be in the first $L$ samples along the fast-time axis. All additional fast-time samples are noise and can be discarded. The resulting data cube is shown in Fig. \ref{Data_Cube}.
+\begin{figure}[H]%[hbt!]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{Data_Cube.png}}}
+\caption{Data Cube.}
+\label{Data_Cube}
+\end{figure}
 \section{Range and Doppler Compression}
+An RDM can be generated from the received data cube using range and doppler compression. This is done by taking an FFT along the fast-time axis and another FFT along the slow-time axis.
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM.png}}}
+\caption{Range and Doppler Compression.}
+\label{RDM}
+\end{figure}
+\noindent
+The Fast-Time FFT extracts the frequency content in a single pulse. Each target will produce a single tone, which results in a single peak. The frequency of each peak is influenced by the range and doppler shift of each target. The doppler shift will produce the following error in range measurements:
+\begin{equation}
+\delta R = -\frac{c\tau F_d}{2\beta}
+\end{equation}
+The Slow-Time FFT measures doppler shift or velocity of the target. The Slow-Time FFT is not be influenced by the range of the target.
+\par
+The received data cube can be generated for a set of targets with ranges of $10m$ and $100m$, velocities of $15m/s$ and $10m/s$, and radar cross sections of $1m^2$ and $10000m^2$. 
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM_image0.png}}}
+\caption{RDM for Given Scenario.}
+\label{RDM0}
+\end{figure}
 \section{Amplitude Compensation}
 \section{Range and Doppler Windowing}
 \section{Measurement Limitations}
