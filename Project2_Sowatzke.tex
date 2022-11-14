@@ -26,14 +26,78 @@ osowatzke@arizona.edu}}
 
 \begin{abstract}
 The range resolution of a radar system is inversely proportional to the bandwidth of its transmitted waveform. To achieve a fine range resolution, a high bandwidth waveform is required. This typically results in an increased ADC sampling rate, which leads to higher production costs. A linear frequency modulated (LFM) waveform can be used in conjunction with stretch processing to provide a large transmitted waveform bandwidth with a reduced ADC sampling rate. This leads to a fine range resolution at reduced production costs. This document provides an overview of an LFM radar system with a focus on the signal processing. It specifically examines the generation of range doppler matrices (RDMs) using range and doppler compression. The effects of amplitude compensation, range windowing, and doppler windowing are also be examined. Finally, the measurement limitations of the LFM radar system are examined and methods for improving these limitations are discussed. 
-%Specifically, the role of range and doppler compression in creating Range Doppler Matrices (RDMs).
-%The range resolution of a rectangular pulse is inversely proportional to the length of the rectangular pulse. Therefore, to achieve fine range resolution, a short rectangular pulse is required. However, decreasing the pulse length also leads to a reduction in SNR. Pulse compression waveform seek to decouple pulse length from range resolution and in turn make it possible to simultaneously achieve fine range resolution and a high SNR. One common pulse compression waveform is a linear frequency modulated (LFM) waveform. This document simulates the matched filer response of an LFM waveform and examines the resulting SNR and range resolution.
 \end{abstract}
 
 \begin{IEEEkeywords}
+Linear Frequency Modulated (LFM) Radar System, Stretch Processing, Range Doppler Matrix, Range Compression, Doppler Compression, Amplitude Compensation, Range Windowing, Doppler Windowing, Range Resolution, Velocity Resolution, Range Ambiguity, Doppler Ambiguity
 %Pulse Compression, Linear Frequency Modulated (LFM) Waveform, Matched Filter, SNR, Range Resolution
 \end{IEEEkeywords}
 \section{Introduction}
+An LFM radar system transmits the following waveform: 
+\begin{equation}
+x(t) = e^{j\pi\beta t^2/\tau} \quad 0\leq t \leq \tau 
+\end{equation}
+The bandwidth of this waveform is $\beta$, and the corresponding range resolution is given by:
+\begin{equation}
+\Delta R = \frac{c}{2\beta}
+\end{equation}
+A finer range resolution can be achieved by increasing the bandwidth of the LFM waveform. The instantaneous frequency of the LFM waveform is given by the following equation:
+\begin{equation}
+F_i(t) = \frac{1}{2\pi}\frac{d\theta(t)}{dt} = \frac{\beta}{\tau}t
+\end{equation}
+As such, the transmitted waveform is a ramp on the time-frequency axis. Similarly, the return for a static target is a delayed version of the same ramp. This is shown in Fig. \ref{tx_rx_plot}.
+\begin{figure}[H]%[hbt!]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{tx_rx_plot.png}}}
+\caption{Instantaneous Frequency of Transmit and Receive Signals.}
+\label{tx_rx_plot}
+\end{figure}
+Stretch processing takes advantage of the relationship between the transmit and receive signals. It mixes the receive signal with a signal of the following form:
+\begin{equation}
+m(t) = e^{-j\pi\beta t^2/\tau}
+\end{equation}
+This generates a tone at the following beat frequency:
+\begin{equation}
+F_b = -\frac{\beta t_0}{\tau} = -\frac{2\beta R}{c\tau}
+\end{equation}
+\begin{figure}[H]%[hbt!]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{beat_freq.png}}}
+\caption{Instantaneous Frequency of Demodulated Tone.}
+\label{beat_freq}
+\end{figure}
+\noindent
+A time window $T_w$ can be defined to provide unambiguous coverage of ranges between $0$ and $R_w$. Then, the largest beat frequency magnitude should be
+\begin{equation}
+|F_w| = \frac{\beta T_w}{\tau} = \frac{2\beta R_w}{c\tau}
+\end{equation}
+If the time window, $T_w$, is smaller than the pulse length $\tau$, the ADC rate can be smaller than the chirp bandwidth, $\beta$, leading to significant cost savings.
+\par
+In this document, an LFM radar system with the following parameters will be examined:
+\begin{table}[H]
+\caption{Radar System Parameters}
+\label{Parameter Table}
+\begin{tabularx}{0.5\textwidth}{| X | X |}
+\hline
+Carrier Frequency & 77 GHz \\
+\hline
+Sweep Frequency & 76.8 GHz - 77.2 GHz \\
+\hline
+Pulse Width & 20 $\mu s$ \\
+\hline
+PRI & 30 $\mu s$ \\
+\hline
+Fast Time Samples & 400 \\
+\hline 
+Number of Chirps & 500 \\
+\hline
+PRF & 50 kHz \\
+\hline
+Duty Cycle & 20\% \\
+\hline
+Fast Time Sampling Frequency & 20 MHz \\
+\hline
+\end{tabularx}
+\end{table}
+\noindent
 \section{Range and Doppler Compression}
 \section{Amplitude Compensation}
 \section{Range and Doppler Windowing}
