@@ -138,8 +138,20 @@ Using the range and RCS of each target, the predicted return power is the same. 
 %\end{equation}
 %The range axis will be quantized in intervals of 
 \section{Amplitude Compensation}
-The targets in Fig. \ref{RDM0} may be falsely interpreted as having the same RCS. Amplitude compensation ensures that the return from each target is influenced only by the RCS. 
+The targets in Fig. \ref{RDM0} may be falsely interpreted as having the same RCS. Amplitude compensation ensures that the return from each target is influenced only by the RCS. Amplitude compensation is performed by scaling each sample output by the fast time FFT by $R^2$, where $R$ is the range that corresponds to a given FFT sample. 
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{Amplitude_Compensation.png}}}
+\caption{RDM Generation with Amplitude Compensation.}
+\end{figure}
+Consider two targets returns that are received in the presence of thermal noise with power $0.0001$. Let the range of both targets be $10m$. Let the velocity of the first target be $15m/s$ and the velocity of the second target be $14m/s$. Finally, let the RCS of the first target be $100m^2$ and the RCS of the second target be $1m^2$. Then, the RDM with amplitude compensation is shown in Fig. \ref{RDM1}.
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM1.png}}}
+\caption{RDM for Given Scenario.}
+\label{RDM1}
+\end{figure}
+Amplitude compensation should ensure that the return of each target is a function of only RCS. Because the RCS of the first target is 20dB greater than that of the second, we expect the first target return to be 20dB greater than the second. This is approximately the case in the RDM. Any discrepancies can be linked to straddle loss.
 \section{Range and Doppler Windowing}
+In the RDM shown in Fig. \ref{RDM1}, the second target return can be difficult to distinguish from the sidelobes of the first target return.
 \section{Measurement Limitations}
 \section{Conclusion}
 %A linear frequency modulated (LFM) waveform is a pulse compression waveform defined by the following equation:
