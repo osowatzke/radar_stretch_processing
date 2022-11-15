@@ -191,6 +191,37 @@ This corresponds to the following velocity resolution :
 \begin{equation}
 \Delta v = \frac{\Delta F_d \cdot \lambda}{2} = \frac{\Delta F_d \cdot c}{2f_c} \approx 0.1299 m/s
 \end{equation}
+The range ambiguity of a conventional radar system is the radar corresponding to a PRI. 
+\begin{equation}
+R_{ua} = \frac{c \cdot PRI}{2} 
+\end{equation}
+The LFM radar system sacrifices some this unambiguous range for a lower sampling rate. The unambiguous range of an LFM radar system is given by the following equation:
+\begin{equation}
+R_w = \frac{c T_w}{2} = \frac{c F_s \tau}{2\beta} = 150m
+\end{equation}
+The unambiguous doppler shift of the system is given by the following equation:
+\begin{equation}
+F_{ua} = PRF = \frac{1}{PRI} = 50kHz
+\end{equation}
+The unambiguous velocity is defined as follows:
+\begin{equation}
+v_{ua} = \frac{PRF\cdot\lambda}{2} = \frac{lambda}{2\cdot PRI} \approx 64.9351m/s 
+\end{equation}
+If a target is at a range of $200m$ and a velocity of $80m/s$, the target will alias in both velocity in range. If the unambiguous velocity interval is defined as $[0, v_{ua})$, the apparent velocity will be
+\begin{equation}
+v_a = v - nv_{ua} = 80 - 1 \cdot 64.9351 \approx 15.0649m/s
+\end{equation}
+The apparent range will be
+\begin{equation}
+R_a = R - nR_{ua} = 200 - 150 = 50m
+\end{equation}
+This is shown in Fig. \ref{RDM3}.
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM3.png}}}
+\caption{RDM for Given Scenario.}
+\label{RDM3}
+\end{figure}
+Note that the measured range is not exactly $50m$ due to range-doppler coupling and the range resolution of the system.
 \section{Conclusion}
 %A linear frequency modulated (LFM) waveform is a pulse compression waveform defined by the following equation:
 %\begin{equation}
