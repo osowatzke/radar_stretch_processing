@@ -151,7 +151,28 @@ Consider two targets returns that are received in the presence of thermal noise 
 \end{figure}
 Amplitude compensation should ensure that the return of each target is a function of only RCS. Because the RCS of the first target is 20dB greater than that of the second, we expect the first target return to be 20dB greater than the second. This is approximately the case in the RDM. Any discrepancies can be linked to straddle loss.
 \section{Range and Doppler Windowing}
-In the RDM shown in Fig. \ref{RDM1}, the second target return can be difficult to distinguish from the sidelobes of the first target return.
+In the RDM shown in Fig. \ref{RDM1}, the second target return can be difficult to distinguish from the sidelobes of the first target return. This is even more apparent in the closeup shown in Fig. \ref{RDM1_close}.
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM1_close.png}}}
+\caption{Closeup of Target Returns.}
+\label{RDM1_close}
+\end{figure}
+\noindent
+Windowing the input to the fast-time and slow-time FFT can reduce the sidelobe levels and make the two targets more distinguishable. The signal processing chain with the added FFT windows is shown in Fig. \ref{Full_Chain}.
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{Full_Chain.png}}}
+\caption{Full Signal Processing Chain with Windowing.}
+\label{Full_Chain}
+\end{figure}
+\noindent
+If the targets used to generate Fig. \ref{RDM1} are passed through a radar system with hamming windowing, the resulting RDM is given in Fig. \ref{RDM2}.
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM2.png}}}
+\caption{RDM for Given Scenario.}
+\label{RDM2}
+\end{figure}
+\noindent
+The range and doppler windows increase the mainlobe width and decrease the magnitude of the range and doppler FFTs. This leads to reduced RDM peaks. The sidelobes in Fig. \ref{RDM2} are significantly lower than the sidelobes of Fig. \ref{RDM1}. 
 \section{Measurement Limitations}
 \section{Conclusion}
 %A linear frequency modulated (LFM) waveform is a pulse compression waveform defined by the following equation:
