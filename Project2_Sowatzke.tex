@@ -33,7 +33,33 @@ Linear Frequency Modulated (LFM) Radar System, Stretch Processing, Range Doppler
 %Pulse Compression, Linear Frequency Modulated (LFM) Waveform, Matched Filter, SNR, Range Resolution
 \end{IEEEkeywords}
 \section{Introduction}
-An LFM radar system transmits the following waveform: 
+In this document, an LFM radar system that leverages stretch processing will be examined. The radar system of interest with configured with the following parameters:
+\begin{table}[H]
+\caption{Radar System Parameters}
+\label{Parameter Table}
+\begin{tabularx}{0.5\textwidth}{| X | X |}
+\hline
+Carrier Frequency & 77 GHz \\
+\hline
+Sweep Frequency & 76.8 GHz - 77.2 GHz \\
+\hline
+Pulse Width & 20 $\mu s$ \\
+\hline
+PRI & 30 $\mu s$ \\
+\hline
+Fast Time Samples & 400 \\
+\hline 
+Number of Chirps & 500 \\
+\hline
+Fast Time Sampling Frequency & 20 MHz \\
+\hline
+\end{tabularx}
+\end{table}
+First, an ADC
+\section{Background}
+
+
+An LFM radar system transmits the following waveform:
 \begin{equation}
 x(t) = e^{j\pi\beta t^2/\tau} \quad 0\leq t \leq \tau 
 \end{equation}
@@ -71,29 +97,6 @@ A time window $T_w$ can be defined to provide unambiguous coverage of ranges bet
 \end{equation}
 If the time window, $T_w$, is smaller than the pulse length $\tau$, the ADC rate can be smaller than the chirp bandwidth, $\beta$, leading to significant cost savings.
 \par
-In this document, an LFM radar system with the following parameters will be examined:
-\begin{table}[H]
-\caption{Radar System Parameters}
-\label{Parameter Table}
-\begin{tabularx}{0.5\textwidth}{| X | X |}
-\hline
-Carrier Frequency & 77 GHz \\
-\hline
-Sweep Frequency & 76.8 GHz - 77.2 GHz \\
-\hline
-Pulse Width & 20 $\mu s$ \\
-\hline
-PRI & 30 $\mu s$ \\
-\hline
-Fast Time Samples & 400 \\
-\hline 
-Number of Chirps & 500 \\
-\hline
-Fast Time Sampling Frequency & 20 MHz \\
-\hline
-\end{tabularx}
-\end{table}
-\noindent
 Vectors of ADC samples corresponding to a PRI can be stacked along the slow-time axis to form a data cube. Note that the pulse return will be in the first $L$ samples along the fast-time axis. All additional fast-time samples are noise and can be discarded. The resulting data cube is shown in Fig. \ref{Data_Cube}.
 \begin{figure}[H]%[hbt!]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{Data_Cube.png}}}
