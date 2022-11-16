@@ -227,8 +227,16 @@ There are a few ways to to increase the unambiguous ranges and velocities of the
 \begin{equation}
 F_s = \frac{2\beta R_w}{c\tau} = 40MHz
 \end{equation}
-Next, the unambiguous velocity can be increased by increasing the $PRF$ of the system. Note that the $PRF$ cannot be increased beyond $1/\tau$. This is because a new pulse cannot be started, while the first pulse is still transmitting.
-
+Next, the unambiguous velocity can be increased by increasing the $PRF$ of the system. Note that the $PRF$ cannot be increased beyond $1/\tau$. This is because a new pulse cannot be started, while the first pulse is still transmitting. If the PRF is increased to this limit, the resulting unambiguous velocity will be
+\begin{equation}
+v_{ua} = \frac{PRF\cdot\lambda}{2} = \frac{(1/\tau)\cdot\lambda}{2} = 97.4026 m/s
+\end{equation}
+Using the adjusted PRF and sample rates, the target at a range of $200m$ and a velocity of $80m/s$ is resolvable without ambiguity. This is shown in Fig. \ref{RDM3_resolvable}.
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM3_resolvable.png}}}
+\caption{RDM with Target Placed in Unambiguous Location.}
+\label{RDM3_resolvable}
+\end{figure}
 \section{Conclusion}
 %A linear frequency modulated (LFM) waveform is a pulse compression waveform defined by the following equation:
 %\begin{equation}
