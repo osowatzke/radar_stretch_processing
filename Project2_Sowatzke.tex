@@ -222,6 +222,13 @@ This is shown in Fig. \ref{RDM3}.
 \label{RDM3}
 \end{figure}
 Note that the measured range is not exactly $50m$ due to range-doppler coupling and the range resolution of the system.
+\par
+There are a few ways to to increase the unambiguous ranges and velocities of the system. First, the unambiguous range can be increased by increasing the sample rate of the system. For example, to increase the unambiguous range to $300m$, the sample rate should be increased to 
+\begin{equation}
+F_s = \frac{2\beta R_w}{c\tau} = 40MHz
+\end{equation}
+Next, the unambiguous velocity can be increased by increasing the $PRF$ of the system. Note that the $PRF$ cannot be increased beyond $1/\tau$. This is because a new pulse cannot be started, while the first pulse is still transmitting.
+
 \section{Conclusion}
 %A linear frequency modulated (LFM) waveform is a pulse compression waveform defined by the following equation:
 %\begin{equation}
