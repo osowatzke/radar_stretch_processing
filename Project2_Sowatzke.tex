@@ -75,7 +75,10 @@ If the instantaneous frequency of the transmitted waveform is plotted versus tim
 \caption{Instantaneous Frequency of Transmit and Receive Signals.}
 \label{inst_freq}
 \end{figure}
-If the targets returns are sampled directly, a sample rate of at least $\beta$ is required. In the stretch processing receiver, additional analog processing is performed prior to sampling to reduce the sample rate and simplify the signal processing.
+If the targets returns are sampled directly, a sample rate of at least $\beta$ is required. In the stretch processing receiver, additional analog processing is performed prior to sampling to reduce the sample rate and simplify the signal processing. This analog processing involves mixing the received signal with an inverted chirp of the following form:
+\begin{equation}
+m(t) = e^{-j\pi\beta t^2/\tau}
+\end{equation}
 
 In a conventional receiver, the sampling rate would need 
 Instead of directly sampling this signal, the stretch processing receiver does additional analog processing. 
