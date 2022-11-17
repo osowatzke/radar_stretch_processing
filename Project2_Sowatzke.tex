@@ -61,6 +61,29 @@ The system's ADC data will be generated for a variety of scenarios using MATLAB.
 This document will provide a walk-through of the data generation and signal processing with simulation results that highlight key milestones. These milestones include ADC data generation, range and doppler compression, amplitude compensation, and range and doppler windowing. Finally, the measurement limitations of the system will be examined, and methods for improving these limitations will be discussed.
 %The LFM radar system will be used to generate Range Doppler Matrices (RDMs). The ADC data will be generated in MATLAB and formatted as a data cube. 
 \section{ADC Data Generation}
+The target returns for a radar system are delayed and doppler shifted versions of the transmitted signal. For an LFM radar system, the transmitted signal takes the following form:
+\begin{equation}
+x(t) = e^{j\pi\beta t^2/\tau}
+\end{equation}
+The instantaneous frequency of this signal is given by the following equation:
+\begin{equation}
+F_i(t) = \frac{1}{2\pi}\frac{d\theta(t)}{dt} = \frac{\beta}{\tau}t
+\end{equation}
+If the instantaneous frequency of the transmitted waveform is plotted versus time, the result will be a ramp function. For a target at a constant range (static target), the received signal will be a delayed version of the initial ramp function. If target velocity is added, a DC offset will be added to the delayed ramp function. This is illustrated in Fig. \ref{inst_freq}.
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{inst_freq.png}}}
+\caption{Instantaneous Frequency of Transmit and Receive Signals.}
+\label{inst_freq}
+\end{figure}
+If the targets returns are sampled directly, a sample rate of at least $\beta$ is required. 
+
+In a conventional receiver, the sampling rate would need 
+Instead of directly sampling this signal, the stretch processing receiver does additional analog processing. 
+
+The instantaneous frequency of this waveform is given by the following equation:
+\begin{equation}
+F_i(t) = \frac{1}{2\pi}\frac{d\theta(t)}{dt} = \frac{\beta}{\tau}t
+\end{equation}
 An LFM radar system transmits the following waveform:
 \begin{equation}
 x(t) = e^{j\pi\beta t^2/\tau} \quad 0\leq t \leq \tau 
