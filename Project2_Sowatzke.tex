@@ -79,58 +79,89 @@ If the targets returns are sampled directly, a sample rate of at least $\beta$ i
 \begin{equation}
 m(t) = e^{-j\pi\beta t^2/\tau}
 \end{equation}
-
-In a conventional receiver, the sampling rate would need 
-Instead of directly sampling this signal, the stretch processing receiver does additional analog processing. 
-
-The instantaneous frequency of this waveform is given by the following equation:
-\begin{equation}
-F_i(t) = \frac{1}{2\pi}\frac{d\theta(t)}{dt} = \frac{\beta}{\tau}t
-\end{equation}
-An LFM radar system transmits the following waveform:
-\begin{equation}
-x(t) = e^{j\pi\beta t^2/\tau} \quad 0\leq t \leq \tau 
-\end{equation}
-The bandwidth of this waveform is $\beta$, and the corresponding range resolution is given by:
-\begin{equation}
-\Delta R = \frac{c}{2\beta}
-\end{equation}
-A finer range resolution can be achieved by increasing the bandwidth of the LFM waveform. The instantaneous frequency of the LFM waveform is given by the following equation:
-\begin{equation}
-F_i(t) = \frac{1}{2\pi}\frac{d\theta(t)}{dt} = \frac{\beta}{\tau}t
-\end{equation}
-As such, the transmitted waveform is a ramp on the time-frequency axis. Similarly, the return for a static target is a delayed version of the same ramp. This is shown in Fig. \ref{tx_rx_plot}.
-\begin{figure}[H]%[hbt!]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{tx_rx_plot.png}}}
-\caption{Instantaneous Frequency of Transmit and Receive Signals.}
-\label{tx_rx_plot}
+After mixing, the instantaneous frequency of each target return is constant with respect to time as shown in Fig. \ref{beat_freq_new}.
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{beat_freq_new.png}}}
+\caption{Received Signals after Mixing}
+\label{beat_freq_new}
 \end{figure}
-Stretch processing takes advantage of the relationship between the transmit and receive signals. It mixes the receive signal with a signal of the following form:
+Note that the beat frequencies start and stop at different times. This phenomenon is called range skew. An analog filter can be used to compensate for the range skew. Since the doppler shift of the target is small with respect to the range frequency, the time delay of each beat frequency is approximately
 \begin{equation}
-m(t) = e^{-j\pi\beta t^2/\tau}
+t_d \approx -\frac{\tau(F_r+F_d)}{\beta} = -\frac{\tau F_b}{\beta}
 \end{equation}
-This generates a tone at the following beat frequency:
+As such, the analog filter must provide a group delay of $\frac{\tau F_b}{\beta}$ seconds at a frequency of $F_b$ Hz. The group delay of an analog filter can be expressed in terms of the phase of the frequency response as follows:
 \begin{equation}
-F_b = -\frac{\beta t_0}{\tau} = -\frac{2\beta R}{c\tau}
+d_g(\Omega) = -\frac{d\Phi(\Omega)}{d\Omega}
 \end{equation}
-\begin{figure}[H]%[hbt!]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{beat_freq.png}}}
-\caption{Instantaneous Frequency of Demodulated Tone.}
-\label{beat_freq}
+Therefore, the frequency response of the delay compensation filter should have the following phase:
+\begin{equation}
+\Phi(\Omega) = -\int d_g(\Omega)d\Omega = -\int\frac{\tau\Omega}{2\pi\beta}d\Omega = -\frac{\tau\Omega^2}{4\pi\beta}
+\end{equation}
+After the analog filter is applied, the time-frequency plot in Fig. \ref{beat_freq_analog_filt} results.
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{beat_freq_analog_filt.png}}}
+\caption{Received Signals after Analog Filtering}
+\label{beat_freq_analog_filt}
 \end{figure}
-\noindent
-A time window $T_w$ can be defined to provide unambiguous coverage of ranges between $0$ and $R_w$. Then, the largest beat frequency magnitude should be
-\begin{equation}
-|F_w| = \frac{\beta T_w}{\tau} = \frac{2\beta R_w}{c\tau}
-\end{equation}
-If the time window, $T_w$, is smaller than the pulse length $\tau$, the ADC rate can be smaller than the chirp bandwidth, $\beta$, leading to significant cost savings.
-\par
-Vectors of ADC samples corresponding to a PRI can be stacked along the slow-time axis to form a data cube. Note that the pulse return will be in the first $L$ samples along the fast-time axis. All additional fast-time samples are noise and can be discarded. The resulting data cube is shown in Fig. \ref{Data_Cube}.
-\begin{figure}[H]%[hbt!]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{Data_Cube.png}}}
-\caption{Data Cube.}
-\label{Data_Cube}
-\end{figure}
+%Note that the amplitude should be constant to prevent distortion of targets returns at different ranges (different frequencies). Therefore, the frequency response of the desired analog filter is given by the following equation:
+%\begin{equation}
+%H(\Omega) = e^{-j\tau\Omega^2/(4\pi\beta)}
+%\end{equation} 
+%an analog filter with delay proportional to the frequency is required. 
+%
+%Targets at increased range have delayed target returns. 
+%Note that targets at increased range have additional delay  
+%In a conventional receiver, the sampling rate would need 
+%Instead of directly sampling this signal, the stretch processing receiver does additional analog processing. 
+%
+%The instantaneous frequency of this waveform is given by the following equation:
+%\begin{equation}
+%F_i(t) = \frac{1}{2\pi}\frac{d\theta(t)}{dt} = \frac{\beta}{\tau}t
+%\end{equation}
+%An LFM radar system transmits the following waveform:
+%\begin{equation}
+%x(t) = e^{j\pi\beta t^2/\tau} \quad 0\leq t \leq \tau 
+%\end{equation}
+%The bandwidth of this waveform is $\beta$, and the corresponding range resolution is given by:
+%\begin{equation}
+%\Delta R = \frac{c}{2\beta}
+%\end{equation}
+%A finer range resolution can be achieved by increasing the bandwidth of the LFM waveform. The instantaneous frequency of the LFM waveform is given by the following equation:
+%\begin{equation}
+%F_i(t) = \frac{1}{2\pi}\frac{d\theta(t)}{dt} = \frac{\beta}{\tau}t
+%\end{equation}
+%As such, the transmitted waveform is a ramp on the time-frequency axis. Similarly, the return for a static target is a delayed version of the same ramp. This is shown in Fig. \ref{tx_rx_plot}.
+%\begin{figure}[H]%[hbt!]
+%\centerline{\fbox{\includegraphics[width=0.4\textwidth]{tx_rx_plot.png}}}
+%\caption{Instantaneous Frequency of Transmit and Receive Signals.}
+%\label{tx_rx_plot}
+%\end{figure}
+%Stretch processing takes advantage of the relationship between the transmit and receive signals. It mixes the receive signal with a signal of the following form:
+%\begin{equation}
+%m(t) = e^{-j\pi\beta t^2/\tau}
+%\end{equation}
+%This generates a tone at the following beat frequency:
+%\begin{equation}
+%F_b = -\frac{\beta t_0}{\tau} = -\frac{2\beta R}{c\tau}
+%\end{equation}
+%\begin{figure}[H]%[hbt!]
+%\centerline{\fbox{\includegraphics[width=0.4\textwidth]{beat_freq.png}}}
+%\caption{Instantaneous Frequency of Demodulated Tone.}
+%\label{beat_freq}
+%\end{figure}
+%\noindent
+%A time window $T_w$ can be defined to provide unambiguous coverage of ranges between $0$ and $R_w$. Then, the largest beat frequency magnitude should be
+%\begin{equation}
+%|F_w| = \frac{\beta T_w}{\tau} = \frac{2\beta R_w}{c\tau}
+%\end{equation}
+%If the time window, $T_w$, is smaller than the pulse length $\tau$, the ADC rate can be smaller than the chirp bandwidth, $\beta$, leading to significant cost savings.
+%\par
+%Vectors of ADC samples corresponding to a PRI can be stacked along the slow-time axis to form a data cube. Note that the pulse return will be in the first $L$ samples along the fast-time axis. All additional fast-time samples are noise and can be discarded. The resulting data cube is shown in Fig. \ref{Data_Cube}.
+%\begin{figure}[H]%[hbt!]
+%\centerline{\fbox{\includegraphics[width=0.4\textwidth]{Data_Cube.png}}}
+%\caption{Data Cube.}
+%\label{Data_Cube}
+%\end{figure}
 \section{Range and Doppler Compression}
 An RDM can be generated from the received data cube using range and doppler compression. This is done by taking an FFT along the fast-time axis and another FFT along the slow-time axis.
 \begin{figure}[H]
