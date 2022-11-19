@@ -247,7 +247,7 @@ Using the range and RCS of each target, the predicted return power is the same. 
 %\end{equation}
 %The range axis will be quantized in intervals of 
 \section{Amplitude Compensation}
-The targets in Fig. \ref{RDM0} may be falsely interpreted as having the same RCS. Amplitude compensation ensures that the return from each target is influenced only by the RCS. Amplitude compensation is performed by scaling each sample output by the fast time FFT by $R^2$, where $R$ is the range that corresponds to a given FFT sample. 
+The targets in Fig. \ref{RDM0} may be falsely interpreted as having the same RCS. Amplitude compensation ensures that the power of each target return is influenced only by the RCS. Amplitude compensation is performed by scaling each of the reordered fast-time FFT samples by $R^2$, where $R$ is the range corresponding to each range bin.
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{Amplitude_Compensation.png}}}
 \caption{RDM Generation with Amplitude Compensation.}
