@@ -75,14 +75,14 @@ If the instantaneous frequency of the transmitted waveform is plotted versus tim
 \caption{Instantaneous Frequency of Transmit and Receive Signals.}
 \label{inst_freq}
 \end{figure}
-If the targets returns are sampled directly, a sample rate of at least $\beta$ is required. In the stretch processing receiver, additional analog processing is performed prior to sampling to reduce the sample rate and simplify the signal processing. This analog processing involves mixing the received signal with an inverted chirp of the following form:
+If the targets returns are sampled directly, a sample rate of at least $\beta$ is required. In the stretch processing receiver, additional analog processing is performed prior to sampling to reduce the sample rate and to simplify the signal processing. This analog processing involves mixing the received signal with an inverted chirp of the following form:
 \begin{equation}
 m(t) = e^{-j\pi\beta t^2/\tau}
 \end{equation}
 After mixing, the beat frequency of each target return is constant with respect to time as shown in Fig. \ref{beat_freq_new}.
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{beat_freq_new.png}}}
-\caption{Received Signals after Mixing}
+\caption{Beat Frequency of Each Target Return}
 \label{beat_freq_new}
 \end{figure}
 Note that the beat frequencies start and stop at different times. This phenomenon is called range skew. An analog filter can be used to compensate for the range skew. Since the doppler shift of the target is small with respect to the range frequency, the time delay of each beat frequency can be approximated as follows:
@@ -104,7 +104,7 @@ H(\Omega) = e^{-j\tau\Omega^2/(4\pi\beta)}
 After the analog filter is applied, the time-frequency plot in Fig. \ref{beat_freq_analog_filt} results.
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{beat_freq_analog_filt.png}}}
-\caption{Received Signals after Analog Filtering}
+\caption{Beat Frequencies after Analog Filtering}
 \label{beat_freq_analog_filt}
 \end{figure}
 For a properly-designed radar system, the range gate size should be large enough to prevent target motion across range gates during the CPI. If this is the case, the stop-and-hop approximation can be used. This approximation decomposes each target return into two parts. The first part of the target return occurs due to the target's range and repeats each PRI. The second part of the target returns occurs due to the doppler shift, which is applied across the entire train of pulses. Using this approximation, the received data cube can be generated in MATLAB as follows:
@@ -113,6 +113,7 @@ For a properly-designed radar system, the range gate size should be large enough
 \caption{Received Data Cube Generation.}
 \label{adc_sig_gen}
 \end{figure}
+
 % One that is due to the target range and is constants treats the target return as constant over each of the pulses with an added doppler shift across the pulse train. 
 %The radar system transmits a sequence of indentical chirp pulses each PRI. 
 %For a properly-designed radar system, the range gate size should be large enough to prevent target motion across range gates during the CPI. If this is the case, the beat frequency return due to the range should repeat with the same starting phase each PRI. The  
