@@ -216,7 +216,7 @@ Note that this sorting operation is typically performed in post-processing. Howe
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM_Gate_Reordering.png}}}
 \caption{RDM Generation with Gate Reordering}
-\label{Sorted_RDM}
+\label{RDM_Gate_Reording}
 \end{figure}
 
 %targets in the first range gate
@@ -319,7 +319,7 @@ F_{ua} = PRF = \frac{1}{PRI} = 50kHz
 \end{equation}
 The unambiguous velocity is defined as follows:
 \begin{equation}
-v_{ua} = \frac{PRF\cdot\lambda}{2} = \frac{lambda}{2\cdot PRI} \approx 64.9351m/s 
+v_{ua} = \frac{PRF\cdot\lambda}{2} = \frac{\lambda}{2\cdot PRI} \approx 64.9351m/s 
 \end{equation}
 If a target is at a range of $200m$ and a velocity of $80m/s$, the target will alias in both velocity in range. If the unambiguous velocity interval is defined as $[0, v_{ua})$, the apparent velocity will be
 \begin{equation}
@@ -338,15 +338,29 @@ This is shown in Fig. \ref{RDM3}.
 \noindent
 Note that the measured range is not exactly $50m$ due to range-doppler coupling and the range resolution of the system.
 \par
-There are a few ways to to increase the unambiguous ranges and velocities of the system. First, the unambiguous range can be increased by increasing the sample rate of the system. For example, to increase the unambiguous range to $300m$, the sample rate should be increased to 
+To correctly detect the target's range and velocity, the system's unambiguous range and velocity must be increased. The unambiguous velocity is inversely proportional to the PRI. Therefore, to increase the unambiguous velocity, the PRI must be reduced. If the PRI is reduced to $20\mu s$, the unambiguous velocity will be given by the following:
 \begin{equation}
-F_s = \frac{2\beta R_w}{c\tau} = 40MHz
+v_{ua} = \frac{\lambda}{2\cdot PRI} \approx 97.4026 m/s
 \end{equation}
-Next, the unambiguous velocity can be increased by increasing the $PRF$ of the system. Note that the $PRF$ cannot be increased beyond $1/\tau$. This is because a new pulse cannot be started, while the first pulse is still transmitting. If the PRF is increased to this limit, the resulting unambiguous velocity will be
+Note that the PRI is limited by the pulse length $\tau$ and the time it takes the VCO to stabilize between chirps. If the time between chirps is held constant, the pulse length will need to be reduced to $10\mu s$. Depending on the performance of the VCO, the chirp bandwidth may also need to be reduced. In this document, the VCO is assumed to be tolerant of the increased chirp rate. This ensures that the existing range resolution is preserved.
+\par
+To increase the system's unambiguous range, the sample rate of the ADC must be increased. To provide an unambiguous range of 300m with the reduced pulse length, the ADC sample rate must be increased to:
 \begin{equation}
-v_{ua} = \frac{PRF\cdot\lambda}{2} = \frac{(1/\tau)\cdot\lambda}{2} = 97.4026 m/s
-\end{equation}
-Using the adjusted PRF and sample rates, the target at a range of $200m$ and a velocity of $80m/s$ is resolvable without ambiguity. This is shown in Fig. \ref{RDM3_resolvable}.
+F_s = \frac{2\beta R_w}{c\tau} = 80MHz 
+\end{equation} 
+%
+%There are a few ways to to increase the unambiguous range and velocity of the system. The unambiguous velocity is proportional to the system's PRF. Therefore, to increase the unambiguous velocity, the system's PRF must be increased. The PRF is inversely proportional to the PRI. As such, the increase in PRF 
+%
+%First, the unambiguous range can be increased by increasing the sample rate of the system. For example, to increase the unambiguous range to $300m$, the sample rate should be increased to 
+%\begin{equation}
+%F_s = \frac{2\beta R_w}{c\tau} = 40MHz
+%\end{equation}
+%Next, the unambiguous velocity can be increased by increasing the $PRF$ of the system. Note that the $PRF$ cannot be increased beyond $1/\tau$. This is because a new pulse cannot be started, while the first pulse is still transmitting. If the PRF is increased to this limit, the resulting unambiguous velocity will be
+%\begin{equation}
+%v_{ua} = \frac{PRF\cdot\lambda}{2} = \frac{(1/\tau)\cdot\lambda}{2} = 97.4026 m/s
+%\end{equation}
+%Using the adjusted PRF and sample rates, the target at a range of $200m$ and a velocity of $80m/s$ is resolvable without ambiguity. This is shown in Fig. \ref{RDM3_resolvable}.
+Using the reduced PRI and increased sample rate, the target at a range of $200m$ and a velocity of $80m/s$ can be resolved without ambiguity. This is illustrated in Fig. \ref{RDM3_resolvable}.
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM3_resolvable.png}}}
 \caption{RDM with Target Placed in Unambiguous Location.}
