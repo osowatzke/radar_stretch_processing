@@ -247,6 +247,7 @@ Using the range and RCS of each target, the predicted return power is the same. 
 %\end{equation}
 %The range axis will be quantized in intervals of 
 \section{Amplitude Compensation}
+\label{amp_comp_section}
 The targets in Fig. \ref{RDM0} may be falsely interpreted as having the same RCS. Amplitude compensation ensures that the power of each target return is influenced only by the RCS. Amplitude compensation is performed by scaling each of the reordered fast-time FFT samples by $R^2$, where $R$ is the range corresponding to each range bin.
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{Amplitude_Compensation.png}}}
@@ -274,7 +275,11 @@ Windowing the input to the fast-time and slow-time FFT can reduce the sidelobe l
 \label{Full_Chain}
 \end{figure}
 \noindent
-If the targets used to generate Fig. \ref{RDM1} are passed through a radar system with hamming windowing, the resulting RDM is given in Fig. \ref{RDM2}.
+If the targets described in Section \ref{amp_comp_section} are processed using fast-time and slow-time hamming windows,
+% before the fast-time and slow-time FFT, the 
+%If hamming windows are used in the fast-time and slow-time FFT, the resulting RDM 
+%If the targets used to generate Fig. \ref{RDM1} are passed through a radar system with hamming windowing, 
+the resulting RDM will be given by Fig. \ref{RDM2}.
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM2.png}}}
 \caption{RDM for Given Scenario.}
@@ -285,7 +290,7 @@ The range and doppler windows increase the mainlobe width and decrease the magni
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM2_Close.png}}}
 \caption{Closeup of Target Returns.}
-\label{RDM2}
+\label{RDM2_close}
 \end{figure}
 \section{Measurement Limitations}
 The range and velocity measurements from the RDM are limited by the range resolution, doppler resolution, range ambiguity, and doppler ambiguity of the system. The range resolution of the system is given by the following equation:
@@ -304,7 +309,7 @@ The range ambiguity of a conventional radar system is the radar corresponding to
 \begin{equation}
 R_{ua} = \frac{c \cdot PRI}{2} 
 \end{equation}
-The LFM radar system sacrifices some this unambiguous range for a lower sampling rate. The unambiguous range of an LFM radar system is given by the following equation:
+The LFM radar system sacrifices some of this unambiguous range for a lower sampling rate. The unambiguous range of an LFM radar system is given by the following equation:
 \begin{equation}
 R_w = \frac{c T_w}{2} = \frac{c F_s \tau}{2\beta} = 150m
 \end{equation}
@@ -330,6 +335,7 @@ This is shown in Fig. \ref{RDM3}.
 \caption{RDM for Given Scenario.}
 \label{RDM3}
 \end{figure}
+\noindent
 Note that the measured range is not exactly $50m$ due to range-doppler coupling and the range resolution of the system.
 \par
 There are a few ways to to increase the unambiguous ranges and velocities of the system. First, the unambiguous range can be increased by increasing the sample rate of the system. For example, to increase the unambiguous range to $300m$, the sample rate should be increased to 
