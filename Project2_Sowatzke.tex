@@ -311,6 +311,7 @@ R_{ua} = \frac{c \cdot PRI}{2}
 \end{equation}
 The LFM radar system sacrifices some of this unambiguous range for a lower sampling rate. The unambiguous range of an LFM radar system is given by the following equation:
 \begin{equation}
+\label{Rw CPI0}
 R_w = \frac{c T_w}{2} = \frac{c F_s \tau}{2\beta} = 150m
 \end{equation}
 The unambiguous doppler shift of the system is given by the following equation:
@@ -319,6 +320,7 @@ F_{ua} = PRF = \frac{1}{PRI} = 50kHz
 \end{equation}
 The unambiguous velocity is defined as follows:
 \begin{equation}
+\label{vua CPI0}
 v_{ua} = \frac{PRF\cdot\lambda}{2} = \frac{\lambda}{2\cdot PRI} \approx 64.9351m/s 
 \end{equation}
 If a target is at a range of $200m$ and a velocity of $80m/s$, the target will alias in both velocity in range. If the unambiguous velocity interval is defined as $[0, v_{ua})$, the apparent velocity will be
@@ -366,6 +368,111 @@ Using the reduced PRI and increased sample rate, the target at a range of $200m$
 \caption{RDM with Target Placed in Unambiguous Location.}
 \label{RDM3_resolvable}
 \end{figure}
+If the sample rate of the ADC cannot be increased, another solution involves using two CPIs with unique sample rates and PRIs. One possible set of CPI configurations uses the parameters given in Table \ref{Parameter Table} for the first CPI and adjusts the sample rate and PRI of the second CPI to $15MHz$ and $40\mu s$ respectively. The unambiguous range and velocity for the first CPI are given by equations \ref{Rw CPI0} and \ref{vua CPI0} respectively. The unambiguous range and velocity for the second CPI are given as follows:
+\begin{equation}
+R_w = \frac{c F_s \tau}{2\beta} = 112.5m
+\end{equation}
+\begin{equation}
+v_{ua} = \frac{\lambda}{2\cdot PRI} \approx 48.7013 m/s
+\end{equation}
+The unambiguous range of the system can be expressed in terms of each CPI's unambiguous range as follows:
+\begin{equation}
+\label{Rua}
+R_{uas} = \text{lcm}(R_{ua0}, R_{ua1}) = 450m
+\end{equation}
+The unambiguous velocity of the system can be expressed in a form similar to equation \ref{Rua}. However, due to rounding errors in the unambiguous velocities, it is preferable to first solve for the base interval $T_g$ and set of staggers $\{k_p\}$. The base interval and set of staggers are given by the following equations:
+\begin{equation}
+T_g = \text{gcd}(PRI_0,PRI_1) = 10\mu s
+\end{equation}
+\begin{equation}
+k_0 = 3 \quad k_1 = 4
+\end{equation}
+Using the base interval and set of staggers, the system's unambiguous doppler shift can be expressed as follows:
+\begin{equation}
+F_{bs} = \frac{1}{T_g}\text{lcm}\left(\frac{1}{k_0},\frac{1}{k_1}\right) = 100kHz
+\end{equation}
+Finally, the system's unambiguous velocity can be computed as follows:
+\begin{equation}
+v_{uas} = \frac{F_{bs}\lambda}{2} \approx 194.805m/s
+\end{equation}
+The RDM for the first CPI is shown in Fig. \ref{RDM3}, and the RDM for the second CPI is shown in Fig. \ref{multi_prf_rdm}.
+\begin{figure}[H]
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{multi_prf_rdm.png}}}
+\caption{RDM for Second CPI}
+\label{multi_prf_rdm}
+\end{figure}
+The true velocity and range of the target can be computed by examining the possible ranges and velocities in the unambiguous interval. For the first CPI illustrated in Fig. \ref{RDM3}, the possible target ranges are given as follows:
+\begin{table}[H]
+\caption{Possible Target Ranges Derived from First CPI}
+\label{Range CPI0}
+\begin{tabularx}{0.5\textwidth}{| X | X |}
+\hline
+Ambiguity Interval & Range \\
+\hline
+0 & 50.25m \\
+\hline
+1 & 200.25m \\
+\hline
+2 & 350.25m \\
+\hline
+\end{tabularx}
+\end{table}
+For the second CPI illustrated in Fig. \ref{multi_prf_rdm}, the possible target ranges are given as follows:
+\begin{table}[H]
+\caption{Possible Target Ranges Derived from Second CPI}
+\label{Range CPI1}
+\begin{tabularx}{0.5\textwidth}{| X | X |}
+\hline
+Ambiguity Interval & Range \\
+\hline
+0 & 87.75m \\
+\hline
+1 & 200.25m \\
+\hline
+2 & 312.75m \\
+\hline
+3 & 425.25m \\
+\hline
+\end{tabularx}
+\end{table}
+The true range of the target is the closest pair of measurements, which is 200.25m. Note that this result matches the result shown in Fig. \ref{RDM3_resolvable}. 
+\par
+The velocity of the second target can be found in a similar manner. For the CPI illustrated in Fig. \ref{RDM3}, the possible target velocities are given as follows:
+\begin{table}[H]
+\caption{Possible Target Velocities Derived from First CPI}
+\label{Velocity CPI0}
+\begin{tabularx}{0.5\textwidth}{| X | X |}
+\hline
+Ambiguity Interval & Velocity \\
+\hline
+0 & 15.0649m/s \\
+\hline
+1 & 80m/s \\
+\hline
+2 & 144.9351m/s \\
+\hline
+\end{tabularx}
+\end{table}
+For the second CPI illustrated in Fig. \ref{multi_prf_rdm}, the possible target ranges are given as follows: 
+\begin{table}[H]
+\caption{Possible Target Velocities Derived from Second CPI}
+\label{Velocity CPI1}
+\begin{tabularx}{0.5\textwidth}{| X | X |}
+\hline
+Ambiguity Interval & Velocity \\
+\hline
+0 & 31.2662m/s \\
+\hline
+1 & 79.9675m/s \\
+\hline
+2 & 128.6688m/s \\
+\hline
+3 & 177.3701m/s \\
+\hline
+\end{tabularx}
+\end{table}
+The true velocity of the target is the closest pair of measurements, which is approximately 80m/s. Note that this result approximately matches the result shown in Fig. \ref{RDM3_resolvable}. Any measurement differences occur due different velocity resolutions in each of the CPIs.
+%given by The RDM for the first CPI is given in Fig. \ref{}
 \section{Conclusion}
 %A linear frequency modulated (LFM) waveform is a pulse compression waveform defined by the following equation:
 %\begin{equation}
