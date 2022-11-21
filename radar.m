@@ -33,10 +33,10 @@ classdef radar < handle
         % light speed (m/s)
         c = 3e8;
 
-        % enable fft shift
-        % 0 => v_int = [0 vua)
-        % 1 => v_int = [-vua/2 vua)
-        en_fft_shift = 1;
+        % unambiguous velocity interval select
+        % 0 => vua_int = [0 vua)
+        % 1 => vua_int = [-vua/2 vua)
+        vua_sel = 0;
     end
 
     % private properties
@@ -51,9 +51,7 @@ classdef radar < handle
         % Nx1 vector of targets RCS (m^2)
         RCS;
 
-        % Normalized thermal noise power expressed in units of 
-        % ((4*pi)^3)/(Pt*G^2*lambda^2). No normalization factor if
-        % Pt*G^2*lambda^2=(4*pi)^3
+        % Thermal noise power (W)
         thermal_noise_power;
 
         % Received data cube [fast time samples x slow time samples]
@@ -192,7 +190,7 @@ classdef radar < handle
             % frequency offset due to doppler shift (Hz)
             f_d = 2*self.v/self.lambda;
             
-            % PRI lengthS in samples
+            % PRI length in samples
             pri_len = round(self.PRI*self.f_s);
 
             % compute amplitude of each target return
@@ -255,7 +253,7 @@ classdef radar < handle
             % Shift is needed to produce frequencies from [0, -2*pi) 
             % and place R=0 at bottom of RDM
             if self.f_start < self.f_stop
-                range_fft_out = circshift(flip(range_fft_out,1),1,1);
+                range_fft_out = circshift(flip(range_fft_out,1),1);
             end
 
             % Array of ranges for amplitude correction
@@ -320,7 +318,7 @@ classdef radar < handle
             vaxis = self.vs*(0:(self.K-1));
 
             % for [-vua/2, vua/2) unambiguous velocity interval
-            if self.en_fft_shift
+            if self.vua_sel
                 vaxis = vaxis - self.vua/2;
             end
 
@@ -329,7 +327,7 @@ classdef radar < handle
             rdm_plot = 20*log10(abs(self.rdm));
 
             % for [-vua/2, vua/2) unambiguous velocity interval
-            if self.en_fft_shift
+            if self.vua_sel
                 rdm_plot = fftshift(rdm_plot,2);
             end
 
@@ -344,7 +342,7 @@ classdef radar < handle
             Rm = self.Rs*self.range_gate;
 
             % for [-vua/2, vua/2) unambiguous velocity interval
-            if self.en_fft_shift
+            if self.vua_sel
                 vm = vm - self.vua*(vm >= (self.vua/2));
             end
 
