@@ -484,7 +484,7 @@ The true velocity of the target is the closest pair of measurements, which is ap
 \section{Conclusion}
 In this document, an LFM radar system leveraging stretch processing was examined. 
 %An overview of the transmitted LFM waveform and stretch processing was provided.
-The stretch processing receiver performed additional analog processing before the ADC to reduce the sample rate of the system. The sampled ADC signal was then shaped in data cube. MATLAB was used to generate this received data cube and then process it. Key processing steps included range and doppler compression, which provided range and velocity estimates for each target. Other processing steps included amplitude compensation, which ensured each target's return power depended only on the RCS, and FFT windowing, which reduced sidelobe levels. Finally, the measurement limitations of the system were discussed (range resolution, doppler resolution, range ambiguity, and doppler ambiguity). Two methods for extending the ambiguities were also provided. The first method involved reducing the PRI, reducing pulse length, and increasing the sampling rate. The second method involved using two CPIs with slightly different PRIs and sampling rates. Both methods were proven to extend the system's ambiguities. The concepts discussed in this document are crucial for the design and implementation of an LFM radar system leveraging stretch processing. However, they can also be applied to many other radar systems.
+The stretch processing receiver performed additional analog processing before the ADC to reduce the sample rate of the system. The sampled ADC signal was then shaped in data cube. MATLAB was used to generate received data cubes for different scenarios and then process them. The result of these operations were range doppler matrices (RDMs). Key processing steps included range and doppler compression, which provided range and velocity estimates for each target. Other processing steps included amplitude compensation, which ensured each target's return power depended only on the RCS, and FFT windowing, which reduced sidelobe levels. Finally, the measurement limitations of the system were discussed (range resolution, doppler resolution, range ambiguity, and doppler ambiguity). Two methods for extending the ambiguities were also provided. The first method involved reducing the PRI and pulse length, while increasing the sampling rate. The second method involved using two CPIs with slightly different PRIs and sampling rates. Both methods were proven to extend the system's ambiguities. The concepts discussed in this document are crucial for the design and implementation of an LFM radar system leveraging stretch processing. However, they can also be applied to many other radar systems.
 %Stretch processing transforms each target return into a tone. The ADC signal is a summation of each target return (tone) and thermal noise. The ADC signal can be reshaped into a data cube by stacking the received pulses. MATLAB was used to generate the received data cube and transform it into an range doppler matrix (RDM). To generate  
 %%The return for multiple targets was a superposition of these tones. After stacking each of the received pulses, a data cube was generated. Signal processing was then used to transform this data cube into a range doppler matrix (RDM). 
 %%The received data cube was a series of stacked pulses. MATLAB was used to generate the  
@@ -697,15 +697,15 @@ The stretch processing receiver performed additional analog processing before th
 %\par
 %For a rectangular pulse of the same length $\tau$, the increase in SNR due to the matched filter is also given by $L$. However, the range resolution is increased to $c\tau/2$. Therefore, the range resolution of an LFM waveform is smaller than that of a rectangular waveform by a factor of $\beta\tau$. For the simulated radar system, $\beta\tau = 400$. This result demonstrates the advantage of using a pulse compression waveform such as LFM. Specifically, the SNR of the system can be increased, while maintaining a fine range resolution.
 %
-%\onecolumn
-%\pagebreak
-%\appendices
-%\section{MATLAB Source Code}
-%\label{matlab_code}
-%\lstset{style=Matlab-editor}
-%\lstinputlisting{Project1_Sowatzke.m}
-%\raggedbottom
-%\pagebreak
-%\lstinputlisting{radar.m}
-%\raggedbottom
+\onecolumn
+\pagebreak
+\appendices
+\section{MATLAB Source Code}
+\label{matlab_code}
+\lstset{style=Matlab-editor}
+\lstinputlisting{Project2_Sowatzke.m}
+\raggedbottom
+\pagebreak
+\lstinputlisting{radar.m}
+\raggedbottom
 \end{document}

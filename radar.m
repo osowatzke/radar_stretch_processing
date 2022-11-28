@@ -1,6 +1,6 @@
 % Author: O. Sowatzke
 %
-% Modified: 11/25/2022
+% Modified: 12/01/2022
 %
 % Subject: Class generates RDMs for a radar system using stretch processing
 %
