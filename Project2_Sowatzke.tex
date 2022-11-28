@@ -190,7 +190,12 @@ An RDM can be generated from the received data cube using range and doppler comp
 \label{RDM}
 \end{figure}
 \noindent
-The fast-time FFT extracts the frequency content in each pulse. Each target will produce a single tone, which results in a single peak. The frequency of each peak is influenced by the range and doppler shift of each target. The doppler shift will produce the following error in range measurements:
+%The 
+%After stretch processing, each target will produce a 
+The fast-time FFT extracts the frequency content in each pulse. Each pulse contains the sum of all target returns (tones). Therefore, the fast-time FFT will produce a peak for each target. The frequency of each peak is influenced primarily by target range.
+% As such, the fast-time FFT is used to measure range. 
+As such, it is used to measure range; however, the doppler shift of the target will produce the following error in these range measurements:
+% a summation of tones, whose frequency is influenced primarily by  frequency  After stretch processing, each target return will generate a tone. Therefore each  the resulting Each target will produce a single tone, which results in a single peak. The frequency of each peak is influenced by the range and doppler shift of each target. The doppler shift will produce the following error in range measurements:
 \begin{equation}
 \delta R = -\frac{c\tau F_d}{2\beta}
 \end{equation}
@@ -309,7 +314,7 @@ The range ambiguity of a conventional radar system is the radar corresponding to
 \begin{equation}
 R_{ua} = \frac{c \cdot PRI}{2} 
 \end{equation}
-The LFM radar system sacrifices some of this unambiguous range for a lower sampling rate. The unambiguous range of an LFM radar system is given by the following equation:
+The LFM radar system using stretch processing sacrifices some of the unambiguous range for a lower sampling rate. The unambiguous range of the given radar system is described by the following equation:
 \begin{equation}
 \label{Rw CPI0}
 R_w = \frac{c T_w}{2} = \frac{c F_s \tau}{2\beta} = 150m
@@ -477,6 +482,14 @@ Ambiguity Interval & Velocity \\
 The true velocity of the target is the closest pair of measurements, which is approximately 80m/s. Note that this result approximately matches the result shown in Fig. \ref{RDM3_resolvable}. Any measurement discrepancies occur due different velocity resolutions in each of the CPIs.
 %given by The RDM for the first CPI is given in Fig. \ref{}
 \section{Conclusion}
+In this document, an LFM radar system leveraging stretch processing was examined. 
+%An overview of the transmitted LFM waveform and stretch processing was provided. 
+Stretch processing transforms each target return into a tone. The ADC signal is a summation of each target return (tone) and thermal noise. The ADC signal can be reshaped into a data cube by stacking the received pulses. MATLAB was used to generate the received data cube and transform it into an range doppler matrix (RDM). To generate  
+%The return for multiple targets was a superposition of these tones. After stacking each of the received pulses, a data cube was generated. Signal processing was then used to transform this data cube into a range doppler matrix (RDM). 
+%The received data cube was a series of stacked pulses. MATLAB was used to generate the  
+%The resulting signal was a superposition Next, the analog processing stretch processing with a focus on the analog processing was provided. 
+In this document, MATLAB was used to generate the received data cube and process the data. 
+%After signal processing, the result was a range doppler matrix (RDM).
 %A linear frequency modulated (LFM) waveform is a pulse compression waveform defined by the following equation:
 %\begin{equation}
 %x(t)=e^{j\pi\beta t^2/\tau}
