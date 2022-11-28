@@ -483,12 +483,13 @@ The true velocity of the target is the closest pair of measurements, which is ap
 %given by The RDM for the first CPI is given in Fig. \ref{}
 \section{Conclusion}
 In this document, an LFM radar system leveraging stretch processing was examined. 
-%An overview of the transmitted LFM waveform and stretch processing was provided. 
-Stretch processing transforms each target return into a tone. The ADC signal is a summation of each target return (tone) and thermal noise. The ADC signal can be reshaped into a data cube by stacking the received pulses. MATLAB was used to generate the received data cube and transform it into an range doppler matrix (RDM). To generate  
-%The return for multiple targets was a superposition of these tones. After stacking each of the received pulses, a data cube was generated. Signal processing was then used to transform this data cube into a range doppler matrix (RDM). 
-%The received data cube was a series of stacked pulses. MATLAB was used to generate the  
-%The resulting signal was a superposition Next, the analog processing stretch processing with a focus on the analog processing was provided. 
-In this document, MATLAB was used to generate the received data cube and process the data. 
+%An overview of the transmitted LFM waveform and stretch processing was provided.
+The stretch processing receiver performed additional analog processing before the ADC to reduce the sample rate of the system. The sampled ADC signal was then shaped in data cube. MATLAB was used to generate this received data cube and then process it. Key processing steps included range and doppler compression, which provided range and velocity estimates for each target. Other processing steps included amplitude compensation, which ensured each target's return power depended only on the RCS, and FFT windowing, which reduced sidelobe levels. Finally, the measurement limitations of the system were discussed (range resolution, doppler resolution, range ambiguity, and doppler ambiguity). Two methods for extending the ambiguities were also provided. The first method involved reducing the PRI, reducing pulse length, and increasing the sampling rate. The second method involved using two CPIs with slightly different PRIs and sampling rates. Both methods were proven to extend the system's ambiguities. The concepts discussed in this document are crucial for the design and implementation of an LFM radar system leveraging stretch processing. However, they can also be applied to many other radar systems.
+%Stretch processing transforms each target return into a tone. The ADC signal is a summation of each target return (tone) and thermal noise. The ADC signal can be reshaped into a data cube by stacking the received pulses. MATLAB was used to generate the received data cube and transform it into an range doppler matrix (RDM). To generate  
+%%The return for multiple targets was a superposition of these tones. After stacking each of the received pulses, a data cube was generated. Signal processing was then used to transform this data cube into a range doppler matrix (RDM). 
+%%The received data cube was a series of stacked pulses. MATLAB was used to generate the  
+%%The resulting signal was a superposition Next, the analog processing stretch processing with a focus on the analog processing was provided. 
+%In this document, MATLAB was used to generate the received data cube and process the data. 
 %After signal processing, the result was a range doppler matrix (RDM).
 %A linear frequency modulated (LFM) waveform is a pulse compression waveform defined by the following equation:
 %\begin{equation}
