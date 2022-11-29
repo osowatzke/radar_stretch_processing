@@ -59,7 +59,6 @@ Fast Time Sampling Frequency & 20 MHz \\
 The system's ADC data will be generated for a variety of scenarios using MATLAB. Then, signal processing will be performed on this data to generate Range Doppler Matrices (RDMs).
 \par
 This document will provide a walk-through of the data generation and signal processing with simulation results that highlight key milestones. These milestones include ADC data generation, range and doppler compression, amplitude compensation, and range and doppler windowing. Finally, the measurement limitations of the system will be examined, and methods for improving these limitations will be discussed.
-%The LFM radar system will be used to generate Range Doppler Matrices (RDMs). The ADC data will be generated in MATLAB and formatted as a data cube. 
 \section{ADC Data Generation}
 The target returns for a radar system are delayed and doppler shifted versions of the transmitted signal. For an LFM radar system, the transmitted signal takes the following form:
 \begin{equation}
@@ -69,21 +68,21 @@ The instantaneous frequency of this signal is given by the following equation:
 \begin{equation}
 F_i(t) = \frac{1}{2\pi}\frac{d\theta(t)}{dt} = \frac{\beta}{\tau}t
 \end{equation}
-If the instantaneous frequency of the transmitted waveform is plotted versus time, the result will be a ramp function. For a target at a constant range (static target), the received signal will be a delayed ramp function. If target velocity is added, a DC offset will be added to the delayed ramp function. This is illustrated in Fig. \ref{inst_freq}.
+If the instantaneous frequency of the transmitted waveform is plotted versus time, the result will be a ramp function. For a target at a constant range (static target), the received signal will be a delayed ramp function. If target velocity is added, a DC offset will be added to the delayed ramp function. This is illustrated in Fig. \ref{instantaneous_frequency}.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{inst_freq.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{instantaneous_frequency.png}}}
 \caption{Instantaneous Frequency of Transmit and Receive Signals.}
-\label{inst_freq}
+\label{instantaneous_frequency}
 \end{figure}
 If the targets returns are sampled directly, a sample rate of at least $\beta$ is required. In the stretch processing receiver, additional analog processing is performed prior to sampling to reduce the sample rate and to simplify the signal processing. This analog processing involves mixing the received signal with an inverted chirp of the following form:
 \begin{equation}
 m(t) = e^{-j\pi\beta t^2/\tau}
 \end{equation}
-After mixing, the beat frequency of each target return is constant with respect to time as shown in Fig. \ref{beat_freq_new}.
+After mixing, the beat frequency of each target return is constant with respect to time as shown in Fig. \ref{beat_frequency}.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{beat_freq_new.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{beat_frequency.png}}}
 \caption{Beat Frequency of Each Target Return}
-\label{beat_freq_new}
+\label{beat_frequency}
 \end{figure}
 Note that the beat frequencies start and stop at different times. This phenomenon is called range skew. An analog filter can be used to compensate for the range skew. Since the doppler shift of the target is small with respect to the range frequency, the time delay of each beat frequency can be approximated as follows:
 \begin{equation}
@@ -101,101 +100,27 @@ Note that the amplitude of the frequency response should be constant to prevent 
 \begin{equation}
 H(\Omega) = e^{-j\tau\Omega^2/(4\pi\beta)}
 \end{equation} 
-After the analog filter is applied, the time-frequency plot in Fig. \ref{beat_freq_analog_filt} results.
+After the analog filter is applied, the time-frequency plot in Fig. \ref{beat_frequency_analog_filter} results.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{beat_freq_analog_filt.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{beat_frequency_analog_filter.png}}}
 \caption{Beat Frequencies after Analog Filtering}
-\label{beat_freq_analog_filt}
+\label{beat_frequency_analog_filter}
 \end{figure}
 For a properly-designed radar system, the range gate size should be large enough to prevent target motion across range gates during the CPI. If this is the case, the stop-and-hop approximation can be used. This approximation decomposes each target return into two parts. The first part of the target return occurs due to the target's range and repeats each PRI. The second part of the target returns occurs due to the doppler shift, which is applied across the entire train of pulses. Using this approximation, the received data cube can be generated in MATLAB as follows:
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.14\textwidth]{ADC_Signal_Generation.png}}}
+\centerline{\fbox{\includegraphics[width=0.14\textwidth]{adc_signal_generation_bd.png}}}
 \caption{Received Data Cube Generation.}
-\label{adc_sig_gen}
+\label{adc_signal_generation_bd}
 \end{figure}
-
-% One that is due to the target range and is constants treats the target return as constant over each of the pulses with an added doppler shift across the pulse train. 
-%The radar system transmits a sequence of indentical chirp pulses each PRI. 
-%For a properly-designed radar system, the range gate size should be large enough to prevent target motion across range gates during the CPI. If this is the case, the beat frequency return due to the range should repeat with the same starting phase each PRI. The  
-%
-%If the measured velocity is small with respect to the 
-%The velocity of a properly-designed radar system should be small enough to limit the target motion during the CPI to a single range gate. 
-%If this is the case, the target return due to range will be constant across $F_r$ will be constant for each pulse in the CPI. In other words,  
-%Note that the same set of beat frequencies will be received in each pulse of the CPI. However, the initial phase of each pulse will vary due to the  the target's doppler shift. 
-%are repeated each pulse. The target's Doppler shift adds a varying phase to each of the pulse returns.
-%Note that the amplitude should be constant to prevent distortion of targets returns at different ranges (different frequencies). Therefore, the frequency response of the desired analog filter is given by the following equation:
-%\begin{equation}
-%H(\Omega) = e^{-j\tau\Omega^2/(4\pi\beta)}
-%\end{equation} 
-%an analog filter with delay proportional to the frequency is required. 
-%
-%Targets at increased range have delayed target returns. 
-%Note that targets at increased range have additional delay  
-%In a conventional receiver, the sampling rate would need 
-%Instead of directly sampling this signal, the stretch processing receiver does additional analog processing. 
-%
-%The instantaneous frequency of this waveform is given by the following equation:
-%\begin{equation}
-%F_i(t) = \frac{1}{2\pi}\frac{d\theta(t)}{dt} = \frac{\beta}{\tau}t
-%\end{equation}
-%An LFM radar system transmits the following waveform:
-%\begin{equation}
-%x(t) = e^{j\pi\beta t^2/\tau} \quad 0\leq t \leq \tau 
-%\end{equation}
-%The bandwidth of this waveform is $\beta$, and the corresponding range resolution is given by:
-%\begin{equation}
-%\Delta R = \frac{c}{2\beta}
-%\end{equation}
-%A finer range resolution can be achieved by increasing the bandwidth of the LFM waveform. The instantaneous frequency of the LFM waveform is given by the following equation:
-%\begin{equation}
-%F_i(t) = \frac{1}{2\pi}\frac{d\theta(t)}{dt} = \frac{\beta}{\tau}t
-%\end{equation}
-%As such, the transmitted waveform is a ramp on the time-frequency axis. Similarly, the return for a static target is a delayed version of the same ramp. This is shown in Fig. \ref{tx_rx_plot}.
-%\begin{figure}[H]%[hbt!]
-%\centerline{\fbox{\includegraphics[width=0.4\textwidth]{tx_rx_plot.png}}}
-%\caption{Instantaneous Frequency of Transmit and Receive Signals.}
-%\label{tx_rx_plot}
-%\end{figure}
-%Stretch processing takes advantage of the relationship between the transmit and receive signals. It mixes the receive signal with a signal of the following form:
-%\begin{equation}
-%m(t) = e^{-j\pi\beta t^2/\tau}
-%\end{equation}
-%This generates a tone at the following beat frequency:
-%\begin{equation}
-%F_b = -\frac{\beta t_0}{\tau} = -\frac{2\beta R}{c\tau}
-%\end{equation}
-%\begin{figure}[H]%[hbt!]
-%\centerline{\fbox{\includegraphics[width=0.4\textwidth]{beat_freq.png}}}
-%\caption{Instantaneous Frequency of Demodulated Tone.}
-%\label{beat_freq}
-%\end{figure}
-%\noindent
-%A time window $T_w$ can be defined to provide unambiguous coverage of ranges between $0$ and $R_w$. Then, the largest beat frequency magnitude should be
-%\begin{equation}
-%|F_w| = \frac{\beta T_w}{\tau} = \frac{2\beta R_w}{c\tau}
-%\end{equation}
-%If the time window, $T_w$, is smaller than the pulse length $\tau$, the ADC rate can be smaller than the chirp bandwidth, $\beta$, leading to significant cost savings.
-%\par
-%Vectors of ADC samples corresponding to a PRI can be stacked along the slow-time axis to form a data cube. Note that the pulse return will be in the first $L$ samples along the fast-time axis. All additional fast-time samples are noise and can be discarded. The resulting data cube is shown in Fig. \ref{Data_Cube}.
-%\begin{figure}[H]%[hbt!]
-%\centerline{\fbox{\includegraphics[width=0.4\textwidth]{Data_Cube.png}}}
-%\caption{Data Cube.}
-%\label{Data_Cube}
-%\end{figure}
 \section{Range and Doppler Compression}
 An RDM can be generated from the received data cube using range and doppler compression. This is done by taking an FFT along the fast-time axis and another FFT along the slow-time axis.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{range_doppler_compression_bd.png}}}
 \caption{Range and Doppler Compression.}
-\label{RDM}
+\label{range_doppler_compression_bd}
 \end{figure}
 \noindent
-%The 
-%After stretch processing, each target will produce a 
-The fast-time FFT extracts the frequency content in each pulse. Each pulse contains the sum of target returns (tones). Therefore, the fast-time FFT will produce a peak for each target. The frequency of each peak is influenced primarily by target range.
-% As such, the fast-time FFT is used to measure range. 
-As such, it is used to measure range; however, the doppler shift of the target will produce the following error in range measurements:
-% a summation of tones, whose frequency is influenced primarily by  frequency  After stretch processing, each target return will generate a tone. Therefore each  the resulting Each target will produce a single tone, which results in a single peak. The frequency of each peak is influenced by the range and doppler shift of each target. The doppler shift will produce the following error in range measurements:
+The fast-time FFT extracts the frequency content in each pulse. Each pulse contains the sum of target returns (tones). Therefore, the fast-time FFT will produce a peak for each target. The frequency of each peak is influenced primarily by target range. As such, it is used to measure range; however, the doppler shift of the target will produce the following error in range measurements:
 \begin{equation}
 \delta R = -\frac{c\tau F_d}{2\beta}
 \end{equation}
@@ -205,37 +130,32 @@ Because the radar system is using an upchirp, the target's range frequency ($F_r
 \begin{equation}
 F_r = -\frac{\beta t_d}{\tau} = -\frac{2\beta R}{c\tau}
 \end{equation}
-Note that targets at non-zero ranges will result in negative beat frequencies. This results in the small ranges being wrapped to the top of the RDM as illustrated in Fig. \ref{Unsorted_RDM}.
+Note that targets at non-zero ranges will result in negative beat frequencies. This results in the small ranges being wrapped to the top of the RDM as illustrated in Fig. \ref{unsorted_rdm}.
 \begin{figure}[H]
-\centerline{\includegraphics[width=0.3\textwidth]{Unsorted_RDM.png}}
+\centerline{\includegraphics[width=0.3\textwidth]{unsorted_rdm.png}}
 \caption{Unsorted RDM.}
-\label{Unsorted_RDM}
+\label{unsorted_rdm}
 \end{figure}
 \noindent
-The range bins can be sorted in ascending order by flipping the RDM along the fast-time axis and circular shifting range bin zero to the bottom of the RDM. After this manipulation, the RDM in Fig. \ref{Sorted_RDM} results.
+The range bins can be sorted in ascending order by flipping the RDM along the fast-time axis and circular shifting range bin zero to the bottom of the RDM. After this manipulation, the RDM in Fig. \ref{sorted_rdm} results.
 \begin{figure}[H]
-\centerline{\includegraphics[width=0.3\textwidth]{Sorted_RDM.png}}
+\centerline{\includegraphics[width=0.3\textwidth]{sorted_rdm.png}}
 \caption{Sorted RDM.}
-\label{Sorted_RDM}
+\label{sorted_rdm}
 \end{figure}
 \noindent
 Note that this sorting operation is typically performed in post-processing. However, in this document, it will be performed earlier to simplify the amplitude compensation applied before the slow-time FFT. After the range gate reordering, the RDM can be generated according to the following block diagram:
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM_Gate_Reordering.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{gate_reordering_bd.png}}}
 \caption{RDM Generation with Gate Reordering}
-\label{RDM_Gate_Reording}
+\label{gate_reordering_bd}
 \end{figure}
-
-%targets in the first range gate
-
-
 \par
-Consider the return from two targets without thermal noise. Let the first target be located at a range of $10m$ with a velocity of $15m/s$ and an RCS of $1m^2$. Next, let the second target be located at a range of $100m$ with a velocity of $10m/s$ and an RCS of $10000m^2$. Then, the RDM generated by the LFM radar system will be given in Fig. \ref{RDM0}.
-%The RDM for the given LFM radar system can be generated for a pair of targets without thermal noise. The received data cube can be generated for a set of targets with ranges of $10m$ and $100m$, velocities of $15m/s$ and $10m/s$, and radar cross sections of $1m^2$ and $10000m^2$. 
+Consider the return from two targets without thermal noise. Let the first target be located at a range of $10m$ with a velocity of $15m/s$ and an RCS of $1m^2$. Next, let the second target be located at a range of $100m$ with a velocity of $10m/s$ and an RCS of $10000m^2$. Then, the RDM generated by the LFM radar system will be given in Fig. \ref{rdm_range_doppler_compression}.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM_image0.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{rdm_range_doppler_compression.png}}}
 \caption{RDM Resulting from Range and Doppler Compression.}
-\label{RDM0}
+\label{rdm_range_doppler_compression}
 \end{figure}
 \noindent
 The measured ranges and velocities are approximately equivalent to the ranges and velocities of the targets. Note that the measured range will be influenced by the doppler shift and measurement resolution of the Fast-Time FFT. The doppler (or velocity) axis will be influenced by the measurement resolution of the Slow-Time FFT.
@@ -244,61 +164,52 @@ The received power from each target return is related to the target range and RC
 \begin{equation}
 P_r \propto \frac{\sigma}{R^4}
 \end{equation}
-Using the range and RCS of each target, the predicted return power is the same. However, the return of the second target is slightly larger than the return of the first target. This occurs because the first target return has a greater straddle loss.
-%Note that the measured ranges will be shifted by the doppler shift. The measured range of the first target will be shifted by:
-%\begin{equation}
-%\delta R = -\frac{c\tau F_d}{2\beta}=-\frac{c\tau (2v/\lambda)}{2\beta}=-0.05775m
-%\end{equation}
-%Similarly, the measured range of the second target will be shifted by:
-%\begin{equation}
-%\delta R = -\frac{c\tau F_d}{2\beta}=-\frac{c\tau (2v/\lambda)}{2\beta}=-0.0385m
-%\end{equation}
-%The range axis will be quantized in intervals of 
+Using the range and RCS of each target, the predicted return power is the same. However, the return of the second target is slightly larger than the return of the first target. This occurs because the first target return has a greater straddle loss. 
 \section{Amplitude Compensation}
 \label{amp_comp_section}
-The targets in Fig. \ref{RDM0} may be falsely interpreted as having the same RCS. Amplitude compensation ensures that the power of each target return is influenced only by the RCS. Amplitude compensation is performed by scaling each of the reordered fast-time FFT samples by $R^2$, where $R$ is the range corresponding to each range bin.
+The targets in Fig. \ref{rdm_range_doppler_compression} may be falsely interpreted as having the same RCS. Amplitude compensation ensures that the power of each target return is influenced only by the RCS. Amplitude compensation is performed by scaling each of the reordered fast-time FFT samples by $R^2$, where $R$ is the range corresponding to each range bin.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{Amplitude_Compensation.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{amplitude_compensation_bd.png}}}
 \caption{RDM Generation with Amplitude Compensation.}
 \end{figure}
-Consider two targets returns that are received in the presence of thermal noise with a relative power of $0.0001$. Let the range of both targets be $10m$. Let the velocity of the first target be $15m/s$ and the velocity of the second target be $14m/s$. Finally, let the RCS of the first target be $100m^2$ and the RCS of the second target be $1m^2$. Then, the RDM with amplitude compensation is shown in Fig. \ref{RDM1}.
+Consider two targets returns that are received in the presence of thermal noise with a relative power of $0.0001$. Let the range of both targets be $10m$. Let the velocity of the first target be $15m/s$ and the velocity of the second target be $14m/s$. Finally, let the RCS of the first target be $100m^2$ and the RCS of the second target be $1m^2$. Then, the RDM with amplitude compensation is shown in Fig. \ref{rdm_amplitude_compensation}.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM1.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{rdm_amplitude_compensation.png}}}
 \caption{RDM after Amplitude Compensation.}
-\label{RDM1}
+\label{rdm_amplitude_compensation}
 \end{figure}
 \noindent
 Amplitude compensation should ensure that the return of each target is a function of only RCS. Because the RCS of the first target is 20dB greater than that of the second, we expect the first target return to be 20dB greater than the second. This is approximately the case in the RDM. Any discrepancies can be linked to straddle loss.
 \section{Range and Doppler Windowing}
-In the RDM shown in Fig. \ref{RDM1}, the second target return can be difficult to distinguish from the sidelobes of the first target return. This is even more apparent in the closeup shown in Fig. \ref{RDM1_close}.
+In the RDM shown in Fig. \ref{rdm_amplitude_compensation}, the second target return can be difficult to distinguish from the sidelobes of the first target return. This is even more apparent in the closeup shown in Fig. \ref{rdm_amplitude_compensation_close}.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM1_close.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{rdm_amplitude_compensation_close.png}}}
 \caption{Closeup of Target Returns.}
-\label{RDM1_close}
+\label{rdm_amplitude_compensation_close}
 \end{figure}
 \noindent
-Windowing the input to the fast-time and slow-time FFT can reduce the sidelobe levels and make the two targets more distinguishable. The signal processing chain with the added FFT windows is shown in Fig. \ref{Full_Chain}.
+Windowing the input to the fast-time and slow-time FFT can reduce the sidelobe levels and make the two targets more distinguishable. The signal processing chain with the added FFT windows is shown in Fig. \ref{fft_windowing_bd}.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{Full_Chain.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{fft_windowing_bd.png}}}
 \caption{Full Signal Processing Chain with Windowing.}
-\label{Full_Chain}
+\label{fft_windowing_bd}
 \end{figure}
 If the targets described in Section \ref{amp_comp_section} are processed using fast-time and slow-time hamming windows,
 % before the fast-time and slow-time FFT, the 
 %If hamming windows are used in the fast-time and slow-time FFT, the resulting RDM 
 %If the targets used to generate Fig. \ref{RDM1} are passed through a radar system with hamming windowing, 
-the resulting RDM will be given by Fig. \ref{RDM2}.
+the resulting RDM will be given by Fig. \ref{rdm_fft_windowing}.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM2.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{rdm_fft_windowing.png}}}
 \caption{RDM with Added Range and Doppler Windows.}
-\label{RDM2}
+\label{rdm_fft_windowing}
 \end{figure}
 \noindent
-The range and doppler windows increase the mainlobe width and decrease the magnitude of the range and doppler FFTs. This leads to reduced RDM peaks. The sidelobes in Fig. \ref{RDM2} are significantly lower than the sidelobes of Fig. \ref{RDM1}. The reduced sidelobes are even more apparent after zooming on the target returns.
+The range and doppler windows increase the mainlobe width and decrease the magnitude of the range and doppler FFTs. This leads to reduced RDM peaks. The sidelobes in Fig. \ref{rdm_fft_windowing} are significantly lower than the sidelobes of Fig. \ref{rdm_amplitude_compensation}. The reduced sidelobes are even more apparent after zooming on the target returns.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM2_Close.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{rdm_fft_windowing_close.png}}}
 \caption{Closeup of Target Returns.}
-\label{RDM2_close}
+\label{rdm_fft_windowing_close}
 \end{figure}
 \section{Measurement Limitations}
 The range and velocity measurements from the RDM are limited by the range resolution, doppler resolution, range ambiguity, and doppler ambiguity of the system. The range resolution of the system is given by the following equation:
@@ -339,11 +250,11 @@ The apparent range will be
 \begin{equation}
 R_a = R - nR_{ua} = 200 - 150 = 50m
 \end{equation}
-This is shown in Fig. \ref{RDM3}.
+This is shown in Fig. \ref{rdm_ambiguous_target}.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM3.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{rdm_ambiguous_target.png}}}
 \caption{RDM with Target Placed in Ambiguous Location.}
-\label{RDM3}
+\label{rdm_ambiguous_target}
 \end{figure}
 \noindent
 Note that the measured range is not exactly $50m$ due to range-doppler coupling and the range resolution of the system.
@@ -357,24 +268,12 @@ Note that the PRI is limited by the pulse length $\tau$ and the time it takes th
 To increase the system's unambiguous range, the sample rate of the ADC must be increased. To provide an unambiguous range of 300m with the reduced pulse length, the ADC sample rate must be increased to:
 \begin{equation}
 F_s = \frac{2\beta R_w}{c\tau} = 80MHz 
-\end{equation} 
-%
-%There are a few ways to to increase the unambiguous range and velocity of the system. The unambiguous velocity is proportional to the system's PRF. Therefore, to increase the unambiguous velocity, the system's PRF must be increased. The PRF is inversely proportional to the PRI. As such, the increase in PRF 
-%
-%First, the unambiguous range can be increased by increasing the sample rate of the system. For example, to increase the unambiguous range to $300m$, the sample rate should be increased to 
-%\begin{equation}
-%F_s = \frac{2\beta R_w}{c\tau} = 40MHz
-%\end{equation}
-%Next, the unambiguous velocity can be increased by increasing the $PRF$ of the system. Note that the $PRF$ cannot be increased beyond $1/\tau$. This is because a new pulse cannot be started, while the first pulse is still transmitting. If the PRF is increased to this limit, the resulting unambiguous velocity will be
-%\begin{equation}
-%v_{ua} = \frac{PRF\cdot\lambda}{2} = \frac{(1/\tau)\cdot\lambda}{2} = 97.4026 m/s
-%\end{equation}
-%Using the adjusted PRF and sample rates, the target at a range of $200m$ and a velocity of $80m/s$ is resolvable without ambiguity. This is shown in Fig. \ref{RDM3_resolvable}.
-Using the reduced PRI and increased sample rate, the target at a range of $200m$ and a velocity of $80m/s$ can be resolved without ambiguity. This is illustrated in Fig. \ref{RDM3_resolvable}.
+\end{equation}
+Using the reduced PRI and increased sample rate, the target at a range of $200m$ and a velocity of $80m/s$ can be resolved without ambiguity. This is illustrated in Fig. \ref{rdm_unambiguous_target}.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM3_resolvable.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{rdm_unambiguous_target.png}}}
 \caption{RDM with Target Placed in Unambiguous Location.}
-\label{RDM3_resolvable}
+\label{rdm_unambiguous_target}
 \end{figure}
 If the sample rate of the ADC cannot be increased, another solution involves using two CPIs with unique sample rates and PRIs. One possible set of CPI configurations uses the parameters given in Table \ref{Parameter Table} for the first CPI and adjusts the sample rate and PRI of the second CPI to $15MHz$ and $40\mu s$ respectively. The unambiguous range and velocity for the first CPI are given by equations \ref{Rw CPI0} and \ref{vua CPI0} respectively. The unambiguous range and velocity for the second CPI are given as follows:
 \begin{equation}
@@ -403,14 +302,14 @@ Finally, the system's unambiguous velocity can be computed as follows:
 \begin{equation}
 v_{uas} = \frac{F_{bs}\lambda}{2} \approx 194.805m/s
 \end{equation}
-The RDM for the first CPI is shown in Fig. \ref{RDM3}, and the RDM for the second CPI is shown in Fig. \ref{multi_prf_rdm}.
+The RDM for the first CPI is shown in Fig. \ref{rdm_ambiguous_target}, and the RDM for the second CPI is shown in Fig. \ref{multiple_cpi_rdm}.
 \begin{figure}[H]
-\centerline{\fbox{\includegraphics[width=0.4\textwidth]{multi_prf_rdm.png}}}
+\centerline{\fbox{\includegraphics[width=0.4\textwidth]{multiple_cpi_rdm.png}}}
 \caption{RDM for Second CPI in Multiple CPI System.}
-\label{multi_prf_rdm}
+\label{multiple_cpi_rdm}
 \end{figure}
 \noindent
-The velocity and range of the target can be computed by examining the set of ranges and velocities that may have lead to the measurements in each CPI. For the first CPI's RDM, illustrated in Fig. \ref{RDM3}, possible target ranges are given below:
+The velocity and range of the target can be computed by examining the set of ranges and velocities that may have lead to the measurements in each CPI. For the first CPI's RDM, illustrated in Fig. \ref{rdm_ambiguous_target}, possible target ranges are given below:
 \begin{table}[H]
 \caption{Possible Target Ranges Derived from First CPI}
 \label{Range CPI0}
@@ -427,7 +326,7 @@ Ambiguity Interval & Range \\
 \end{tabularx}
 \end{table}
 \noindent
-For the second CPI's RDM, illustrated in Fig. \ref{multi_prf_rdm}, possible target ranges are given below:
+For the second CPI's RDM, illustrated in Fig. \ref{multiple_cpi_rdm}, possible target ranges are given below:
 \begin{table}[H]
 \caption{Possible Target Ranges Derived from Second CPI}
 \label{Range CPI1}
@@ -446,7 +345,7 @@ Ambiguity Interval & Range \\
 \end{tabularx}
 \end{table}
 \noindent
-The true range of the target is the closest pair of measurements, which is 200.25m. Note that this matches the result shown in Fig. \ref{RDM3_resolvable}. The velocity of the target can be found in a similar manner. For the first CPI's RDM, illustrated in Fig. \ref{RDM3}, possible target velocities are given below:
+The true range of the target is the closest pair of measurements, which is 200.25m. Note that this matches the result shown in Fig. \ref{rdm_unambiguous_target}. The velocity of the target can be found in a similar manner. For the first CPI's RDM, illustrated in Fig. \ref{rdm_ambiguous_target}, possible target velocities are given below:
 \begin{table}[H]
 \caption{Possible Target Velocities Derived from First CPI}
 \label{Velocity CPI0}
@@ -463,7 +362,7 @@ Ambiguity Interval & Velocity \\
 \end{tabularx}
 \end{table}
 \noindent
-For the second CPI's RDM, illustrated in Fig. \ref{multi_prf_rdm}, possible target velocities are given below:
+For the second CPI's RDM, illustrated in Fig. \ref{multiple_cpi_rdm}, possible target velocities are given below:
 \begin{table}[H]
 \caption{Possible Target Velocities Derived from Second CPI}
 \label{Velocity CPI1}
@@ -482,224 +381,9 @@ Ambiguity Interval & Velocity \\
 \end{tabularx}
 \end{table}
 \noindent
-The true velocity of the target is the closest pair of measurements, which is approximately 80m/s. Note that this result approximately matches the result shown in Fig. \ref{RDM3_resolvable}. Any measurement discrepancies occur due different velocity resolutions in each of the CPIs.
-%given by The RDM for the first CPI is given in Fig. \ref{}
+The true velocity of the target is the closest pair of measurements, which is approximately 80m/s. Note that this result approximately matches the result shown in Fig. \ref{rdm_unambiguous_target}. Any measurement discrepancies occur due different velocity resolutions in each of the CPIs.
 \section{Conclusion}
-In this document, an LFM radar system leveraging stretch processing was examined. 
-%An overview of the transmitted LFM waveform and stretch processing was provided.
-The stretch processing receiver performed additional analog processing before the ADC to reduce the sample rate of the system. The sampled ADC signal was then shaped in data cube. MATLAB was used to generate received data cubes for different scenarios and then process them. The result of this operation was a set of range doppler matrices (RDMs). Key processing steps included range and doppler compression, which provided range and velocity estimates for each target. Other processing steps included amplitude compensation, which ensured each target's return power depended only on the RCS, and FFT windowing, which reduced sidelobe levels. Finally, the measurement limitations of the system were discussed (range resolution, doppler resolution, range ambiguity, and doppler ambiguity). Two methods for extending the ambiguities were also provided. The first method involved reducing the PRI and pulse length, while increasing the sampling rate. The second method involved using two CPIs with slightly different PRIs and sampling rates. Both methods were proven to extend the system's ambiguities. The concepts discussed in this document are crucial for the design and implementation of an LFM radar system leveraging stretch processing. However, they can also be applied to many other radar systems.
-%Stretch processing transforms each target return into a tone. The ADC signal is a summation of each target return (tone) and thermal noise. The ADC signal can be reshaped into a data cube by stacking the received pulses. MATLAB was used to generate the received data cube and transform it into an range doppler matrix (RDM). To generate  
-%%The return for multiple targets was a superposition of these tones. After stacking each of the received pulses, a data cube was generated. Signal processing was then used to transform this data cube into a range doppler matrix (RDM). 
-%%The received data cube was a series of stacked pulses. MATLAB was used to generate the  
-%%The resulting signal was a superposition Next, the analog processing stretch processing with a focus on the analog processing was provided. 
-%In this document, MATLAB was used to generate the received data cube and process the data. 
-%After signal processing, the result was a range doppler matrix (RDM).
-%A linear frequency modulated (LFM) waveform is a pulse compression waveform defined by the following equation:
-%\begin{equation}
-%x(t)=e^{j\pi\beta t^2/\tau}
-%\label{lfm_waveform}
-%\end{equation}
-%where:
-%\begin{fleqn}[\parindent]
-%\begin{align*}
-%\beta &= \text{Waveform Bandwidth (Hz)}\\
-%\tau &= \text{Waveform Duration (s)}
-%\end{align*}
-%\end{fleqn}
-%A sample pulsed radar system will be created in MATLAB to simulate the matched filter response of this waveform. Using the radar system model, the SNR of the matched filter output will be measured and compared to the SNR of the input signal. Additionally, multiple target returns will be generated and used to measure the system's range resolution.
-%\section{Sample Radar System Parameters}
-%To generate the required matched filter response, a pulsed radar system was simulated in MATLAB using the following set of parameters: 
-%%The pulse radar system simulated in MATLAB was designed with the following set of parameters: 
-%\begin{table}[H]
-%\caption{Radar System Parameters}
-%\label{Parameter Table}
-%\begin{tabularx}{0.5\textwidth}{| X | X |}
-%\hline
-%Carrier Frequency & 10 GHz \\
-%\hline
-%Sample Rate & 100 MHz \\
-%\hline
-%Transmit Power & 20 dB \\
-%\hline
-%Antenna Gain & 44.15 dB \\
-%\hline
-%Noise Figure & 10 dB \\
-%\hline 
-%System Losses & 5 dB \\
-%\hline
-%PRF & 50 kHz \\
-%\hline
-%Duty Cycle & 20\% \\
-%\hline
-%Chirp Bandwidth & 100 MHz \\
-%\hline
-%\end{tabularx}
-%\end{table}
-%\noindent
-%Additional parameters can be computed using the parameters given in Table \ref{Parameter Table}. For example, the radar system's PRI can be computed as follows:
-%\begin{equation}
-%PRI = \frac{1}{PRF} = 20 {\mu}s
-%\label{PRI Equation}
-%\end{equation}
-%Another parameter of interest, the length of the LFM pulse ($\tau$), can be computed using the duty cycle ($D$) as follows:
-%\begin{equation}
-%\tau = PRI \cdot D = 4 {\mu}s
-%\label{tau equation}
-%\end{equation}
-%\section{Modeling the Matched Filter Output}
-%\label{modeling_section}
-%To model the matched filter response of the system, the received signal must first be generated for each of the target returns. The process of generating the received signal is illustrated in Fig. \ref{gen_rx_sig}.
-%\begin{figure}[H]
-%\centerline{\fbox{\includegraphics[width=0.3\textwidth]{gen_rx_sig.png}}}
-%\caption{Generating the Received Signal.}
-%\label{gen_rx_sig}
-%\end{figure}
-%Each of the target returns is a delayed and scaled version of the transmitted signal. As such, the transmitted LFM waveform must be generated as part of the workflow. This is done using equation \eqref{lfm_waveform}. Note that the transmitted signal must be padded with zeros to account for the listening period after transmission.
-%\par
-%For a target at a range of $R$ meters, the transmitted signal is delayed by
-%\begin{equation}
-%t_d = \frac{R}{2c} \enspace s
-%\end{equation}
-%The SNR of the target return is given by the following equation:
-%\begin{equation}
-%SNR = \frac{P_t G^2 \lambda^2 \sigma}{(4\pi)^3 R^4 k T_0 B_n F_n L_s L_\alpha(R)}
-%\label{snr_formula}
-%\end{equation}
-%To create a target return with the desired SNR, either the signal power or noise power can be scaled. For this simulation, the signal power is scaled while the noise power is held constant. The transmitted signal given in equation \eqref{lfm_waveform} has unit amplitude, and the noise is sampled from the standard complex normal distribution. Therefore, to achieve the desired SNR, the target return must be scaled by the following factor:
-%\begin{equation}
-%k = 10^{SNR(dB)/20}
-%\end{equation}
-%\par
-%The received signal is the sum of each target return and noise. During waveform transmission, the receiver is assumed to be "blanked" (i.e. it cannot listen while transmitting). To model the effects of "blanking", the beginning of the received pulse is replaced with zeros.
-%\par
-%To increase the SNR of the received signal, the signal is passed through a matched filter. The radar system's matched filtering process is shown in Fig. \ref{gen_mf_output}. 
-%\begin{figure}[H]
-%\centerline{\fbox{\includegraphics[width=0.15\textwidth]{gen_mf_output.png}}}
-%\caption{Matched Filtering of the Input Signal.}
-%\label{gen_mf_output}
-%\end{figure}
-%\par
-%The system's matched filter is generated using to the following equation:
-%\begin{equation}
-%h = x^*(T_M-t)
-%\end{equation}
-%To ensure the matched filter is causal, $T_M$ is chosen to be the length of the transmitted LFM waveform.
-%\par
-%In the radar system model, both the noise and target returns are filtered independently. Note that this provides the same result as directly filtering the received signal.
-%\begin{equation}
-%y(t) = h(t)*(x(t)+n(t)) = h(t)*x(t) + h(t)*n(t)
-%\end{equation}
-%However, it also provides the ability to easily extract signal and noise power measurements from the matched filter output.
-%\section{Matched Filter Output SNR}
-%\label{mf_snr_section}
-%The SNR at the output of the matched filter output should be greater than the SNR of the received signal by a factor of $L$, where $L$ is the matched filter length in samples. For the given radar system, the matched filter length is
-%\begin{equation}
-%L = \frac{\tau}{T_s} = \tau f_s = 400 \text{ samples}
-%\end{equation}
-%Therefore, the SNR of the matched filter output should be $10log_{10}(400)=26.02 \text{ dB}$ greater than that of the received signal. This result will be confirmed via simulation.
-%\par
-%To simulate the matched filter response of the system, a target is placed in the first ambiguity at a range corresponding to a time delay of 25\% of the PRI. The resulting range is
-%\begin{equation}
-%R = \frac{ct_d}{2} = 750 \text{ m}
-%\label{tgt1 range}
-%\end{equation}
-%The RCS of the target can be calculated to provide an arbitrary SNR at the ADC. Starting with equation \eqref{snr_formula}, the RCS can be expressed in the following form:
-%\begin{equation}
-%\sigma = \frac{(4\pi)^3 R^4 k T_0 B_n F_n L_s L_\alpha(R)\cdot SNR}{P_t G^2 \lambda^2}
-%\label{rcs_formula}
-%\end{equation}
-%For this system, the SNR at the ADC is chosen to be 20 dB. This SNR corresponds to a RCS of $0.01307m^2$.
-%\par
-%The received signal for this target configuration can be generated according to Section \ref{modeling_section}. The resulting ADC signal is shown in Fig. \ref{adc_sig}.
-%\begin{figure}[H]
-%\centerline{\fbox{\includegraphics[width=0.4\textwidth]{adc_sig.png}}}
-%\caption{Received ADC Signal.}
-%\label{adc_sig}
-%\end{figure}
-%\noindent
-%This ADC signal can then be passed through the system's matched filter to produce the plot shown in Fig. \ref{mf_output}.
-%\begin{figure}[H]
-%\centerline{\fbox{\includegraphics[width=0.4\textwidth]{mf_output.png}}}
-%\caption{Matched Filter Output.}
-%\label{mf_output}
-%\end{figure}
-%\noindent
-%The SNR of the matched filter output is given by the following equation:
-%\begin{equation}
-%SNR = 10log_{10}\frac{P_s}{P_n}
-%\end{equation}
-%where:
-%\begin{fleqn}[\parindent]
-%\begin{align*}
-%P_s &= \text{Signal Power}\\
-%P_n &= \text{Noise Power}
-%\end{align*}
-%\end{fleqn}
-%The resulting signal power is defined using the peak of the filtered target return as follows:
-%\begin{equation}
-%P_s = \text{max(}|x[k]|\text{)}^2
-%\end{equation}
-%The resulting noise power is defined using the filtered noise samples ($n[k]$). Note that the first $2L-1$ noise samples are ignored due to "blanking" and "charge-up" of the matched filter. Let $m \in [0, N)$ define the "charged-up" noise samples of the matched filter. Then, the noise power is given by
-%\begin{equation}
-%P_n = \frac{1}{N}\sum_{m=0}^{N-1}|n[m]|^2
-%\end{equation}
-%\par
-%For the given simulation, the observed SNR at the matched filter output is $45.97 \text{ dB}$. Note that this is approximately equivalent to the expected SNR of $46.02 \text{ dB}$.
-%\section{Matched Filter Range Resolution} 
-%The range resolution of the matched filter output is theoretically given by
-%\begin{equation}
-%\Delta R = \frac{c}{2\beta} = 1.5 \text{ m}
-%\end{equation}
-%This result will be confirmed via simulation. First, a target will be placed as described in Section \ref{mf_snr_section}. Then, a second target will be placed at a larger range and moved toward the first target until the two targets are indistinguishable from each other. 
-%\par
-%To start, the second target was placed two code lengths ($2L$ samples) away from the first target. This guarantees that the matched filter responses from each target return are non-overlapping. The resulting range of the second target is given by
-%\begin{equation}
-%R = 750 + \frac{c(2\tau)}{2} = 750 + c\tau = 1950 \text{ m}
-%\end{equation}
-%The SNR of the second target return is configured to be 20 dB. Using equation \eqref{rcs_formula}, the resulting RCS is given by $0.59758m^2$. The matched filter response for the combined target return is shown in Fig. \ref{mf_output_clearly_resolvable}.
-%\begin{figure}[H]
-%\centerline{\fbox{\includegraphics[width=0.4\textwidth]{clearly_resolvable.png}}}
-%\caption{Resolvable Target Returns ($1200$m Spacing).}
-%\label{mf_output_clearly_resolvable}
-%\end{figure}
-%\par
-%The second target is clearly distinguishable from the first. As such, the second target can be moved significantly closer to the first target. If it is placed 2 ADC samples away from the first target, the resulting range is given by
-%\begin{equation}
-%R = 750 + \frac{c(2T_s)}{2} = 750 + cT_s = 753 \text{ m}
-%\end{equation}
-%The SNR of this target return can be configured as 20 dB. This results in an RCS of $0.01328m^2$. The matched filter response resulting for the updated target returns is shown in Fig. \ref{resolvable_full}.
-%\begin{figure}[H]
-%\centerline{\fbox{\includegraphics[width=0.4\textwidth]{resolvable_full.png}}}
-%\caption{Resolvable Target Returns ($3$m Spacing).}
-%\label{resolvable_full}
-%\end{figure}
-%\noindent
-%After zooming in on the peak of the matched filter response, the targets can easily be resolved. This is shown in Fig. \ref{resolvable_peak}.
-%\begin{figure}[H]
-%\centerline{\fbox{\includegraphics[width=0.4\textwidth]{resolvable_peak.png}}}
-%\caption{Resolvable Target Returns ($3$m Spacing).}
-%\label{resolvable_peak}
-%\end{figure}
-%\par
-%If the second target is moved one sample closer to the first target, the range of the second target is given by 
-%\begin{equation}
-%R = 750 + \frac{cT_s}{2} = 751.5 \text{ m}
-%\end{equation}
-%If the SNR of the target is configured as 20 dB, the resulting RCS is given by $0.01317m^2$. The peak of the updated matched filter response is shown in Fig. \ref{unresolvable_peak}.
-%\begin{figure}[H]
-%\centerline{\fbox{\includegraphics[width=0.4\textwidth]{unresolvable_peak.png}}}
-%\caption{Unresolvable Target Returns ($1.5$m Spacing).}
-%\label{unresolvable_peak}
-%\end{figure}
-%\par
-%Note that the target returns have blurred into a single target return. As such, the resulting range resolution is $1.5 \text{ m}$. The measured range resolution is identical to the theoretical range resoution. Therefore, the simulated result confirms the theoretical result.
-%\section{Conclusion}
-%This document examined the matched filter response of an LFM waveform using a simulated pulsed radar system. Quantities of interest included the SNR and range resolution of the matched filter output. The SNR of the matched filter output was greater than than input SNR by a factor of the code length ($L$). Additionally, the range resolution of the matched filter output was $c/(2\beta)$.
-%%A radar system was simulated in MATLAB and used to generate the matched filter response of an LFM waveform. 
-%%The measured SNR gain from the matched filter was the code length ($L$), and the measured range resolution was $c/(2\beta)$.
-%\par
-%For a rectangular pulse of the same length $\tau$, the increase in SNR due to the matched filter is also given by $L$. However, the range resolution is increased to $c\tau/2$. Therefore, the range resolution of an LFM waveform is smaller than that of a rectangular waveform by a factor of $\beta\tau$. For the simulated radar system, $\beta\tau = 400$. This result demonstrates the advantage of using a pulse compression waveform such as LFM. Specifically, the SNR of the system can be increased, while maintaining a fine range resolution.
-%
+In this document, an LFM radar system leveraging stretch processing was examined. The stretch processing receiver performed additional analog processing before the ADC to reduce the sample rate of the system. The sampled ADC signal was then shaped in data cube. MATLAB was used to generate received data cubes for different scenarios and then process them. The result of this operation was a set of range doppler matrices (RDMs). Key processing steps included range and doppler compression, which provided range and velocity estimates for each target. Other processing steps included amplitude compensation, which ensured each target's return power depended only on the RCS, and FFT windowing, which reduced sidelobe levels. Finally, the measurement limitations of the system were discussed (range resolution, doppler resolution, range ambiguity, and doppler ambiguity). Two methods for extending the ambiguities were also provided. The first method involved reducing the PRI and pulse length, while increasing the sampling rate. The second method involved using two CPIs with slightly different PRIs and sampling rates. Both methods were proven to extend the system's ambiguities. The concepts discussed in this document are crucial for the design and implementation of an LFM radar system leveraging stretch processing. However, they can also be applied to many other radar systems.
 \onecolumn
 \pagebreak
 \appendices
