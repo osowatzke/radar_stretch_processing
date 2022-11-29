@@ -192,9 +192,9 @@ An RDM can be generated from the received data cube using range and doppler comp
 \noindent
 %The 
 %After stretch processing, each target will produce a 
-The fast-time FFT extracts the frequency content in each pulse. Each pulse contains the sum of all target returns (tones). Therefore, the fast-time FFT will produce a peak for each target. The frequency of each peak is influenced primarily by target range.
+The fast-time FFT extracts the frequency content in each pulse. Each pulse contains the sum of target returns (tones). Therefore, the fast-time FFT will produce a peak for each target. The frequency of each peak is influenced primarily by target range.
 % As such, the fast-time FFT is used to measure range. 
-As such, it is used to measure range; however, the doppler shift of the target will produce the following error in these range measurements:
+As such, it is used to measure range; however, the doppler shift of the target will produce the following error in range measurements:
 % a summation of tones, whose frequency is influenced primarily by  frequency  After stretch processing, each target return will generate a tone. Therefore each  the resulting Each target will produce a single tone, which results in a single peak. The frequency of each peak is influenced by the range and doppler shift of each target. The doppler shift will produce the following error in range measurements:
 \begin{equation}
 \delta R = -\frac{c\tau F_d}{2\beta}
@@ -211,12 +211,14 @@ Note that targets at non-zero ranges will result in negative beat frequencies. T
 \caption{Unsorted RDM.}
 \label{Unsorted_RDM}
 \end{figure}
+\noindent
 The range bins can be sorted in ascending order by flipping the RDM along the fast-time axis and circular shifting range bin zero to the bottom of the RDM. After this manipulation, the RDM in Fig. \ref{Sorted_RDM} results.
 \begin{figure}[H]
 \centerline{\includegraphics[width=0.3\textwidth]{Sorted_RDM.png}}
 \caption{Sorted RDM.}
 \label{Sorted_RDM}
 \end{figure}
+\noindent
 Note that this sorting operation is typically performed in post-processing. However, in this document, it will be performed earlier to simplify the amplitude compensation applied before the slow-time FFT. After the range gate reordering, the RDM can be generated according to the following block diagram:
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM_Gate_Reordering.png}}}
@@ -235,8 +237,9 @@ Consider the return from two targets without thermal noise. Let the first target
 \caption{RDM for Given Scenario.}
 \label{RDM0}
 \end{figure}
+\noindent
 The measured ranges and velocities are approximately equivalent to the ranges and velocities of the targets. Note that the measured range will be influenced by the doppler shift and measurement resolution of the Fast-Time FFT. The doppler (or velocity) axis will be influenced by the measurement resolution of the Slow-Time FFT.
-\par
+\noindent
 The received power from each target return is related to the target range and RCS by the following equation:
 \begin{equation}
 P_r \propto \frac{\sigma}{R^4}
@@ -264,6 +267,7 @@ Consider two targets returns that are received in the presence of thermal noise 
 \caption{RDM for Given Scenario.}
 \label{RDM1}
 \end{figure}
+\noindent
 Amplitude compensation should ensure that the return of each target is a function of only RCS. Because the RCS of the first target is 20dB greater than that of the second, we expect the first target return to be 20dB greater than the second. This is approximately the case in the RDM. Any discrepancies can be linked to straddle loss.
 \section{Range and Doppler Windowing}
 In the RDM shown in Fig. \ref{RDM1}, the second target return can be difficult to distinguish from the sidelobes of the first target return. This is even more apparent in the closeup shown in Fig. \ref{RDM1_close}.
@@ -279,7 +283,6 @@ Windowing the input to the fast-time and slow-time FFT can reduce the sidelobe l
 \caption{Full Signal Processing Chain with Windowing.}
 \label{Full_Chain}
 \end{figure}
-\noindent
 If the targets described in Section \ref{amp_comp_section} are processed using fast-time and slow-time hamming windows,
 % before the fast-time and slow-time FFT, the 
 %If hamming windows are used in the fast-time and slow-time FFT, the resulting RDM 
@@ -484,7 +487,7 @@ The true velocity of the target is the closest pair of measurements, which is ap
 \section{Conclusion}
 In this document, an LFM radar system leveraging stretch processing was examined. 
 %An overview of the transmitted LFM waveform and stretch processing was provided.
-The stretch processing receiver performed additional analog processing before the ADC to reduce the sample rate of the system. The sampled ADC signal was then shaped in data cube. MATLAB was used to generate received data cubes for different scenarios and then process them. The result of these operations were range doppler matrices (RDMs). Key processing steps included range and doppler compression, which provided range and velocity estimates for each target. Other processing steps included amplitude compensation, which ensured each target's return power depended only on the RCS, and FFT windowing, which reduced sidelobe levels. Finally, the measurement limitations of the system were discussed (range resolution, doppler resolution, range ambiguity, and doppler ambiguity). Two methods for extending the ambiguities were also provided. The first method involved reducing the PRI and pulse length, while increasing the sampling rate. The second method involved using two CPIs with slightly different PRIs and sampling rates. Both methods were proven to extend the system's ambiguities. The concepts discussed in this document are crucial for the design and implementation of an LFM radar system leveraging stretch processing. However, they can also be applied to many other radar systems.
+The stretch processing receiver performed additional analog processing before the ADC to reduce the sample rate of the system. The sampled ADC signal was then shaped in data cube. MATLAB was used to generate received data cubes for different scenarios and then process them. The result of this operation was a set of range doppler matrices (RDMs). Key processing steps included range and doppler compression, which provided range and velocity estimates for each target. Other processing steps included amplitude compensation, which ensured each target's return power depended only on the RCS, and FFT windowing, which reduced sidelobe levels. Finally, the measurement limitations of the system were discussed (range resolution, doppler resolution, range ambiguity, and doppler ambiguity). Two methods for extending the ambiguities were also provided. The first method involved reducing the PRI and pulse length, while increasing the sampling rate. The second method involved using two CPIs with slightly different PRIs and sampling rates. Both methods were proven to extend the system's ambiguities. The concepts discussed in this document are crucial for the design and implementation of an LFM radar system leveraging stretch processing. However, they can also be applied to many other radar systems.
 %Stretch processing transforms each target return into a tone. The ADC signal is a summation of each target return (tone) and thermal noise. The ADC signal can be reshaped into a data cube by stacking the received pulses. MATLAB was used to generate the received data cube and transform it into an range doppler matrix (RDM). To generate  
 %%The return for multiple targets was a superposition of these tones. After stacking each of the received pulses, a data cube was generated. Signal processing was then used to transform this data cube into a range doppler matrix (RDM). 
 %%The received data cube was a series of stacked pulses. MATLAB was used to generate the  
