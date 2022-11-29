@@ -234,7 +234,7 @@ Consider the return from two targets without thermal noise. Let the first target
 %The RDM for the given LFM radar system can be generated for a pair of targets without thermal noise. The received data cube can be generated for a set of targets with ranges of $10m$ and $100m$, velocities of $15m/s$ and $10m/s$, and radar cross sections of $1m^2$ and $10000m^2$. 
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM_image0.png}}}
-\caption{RDM for Given Scenario.}
+\caption{RDM Resulting from Range and Doppler Compression.}
 \label{RDM0}
 \end{figure}
 \noindent
@@ -264,7 +264,7 @@ The targets in Fig. \ref{RDM0} may be falsely interpreted as having the same RCS
 Consider two targets returns that are received in the presence of thermal noise with a relative power of $0.0001$. Let the range of both targets be $10m$. Let the velocity of the first target be $15m/s$ and the velocity of the second target be $14m/s$. Finally, let the RCS of the first target be $100m^2$ and the RCS of the second target be $1m^2$. Then, the RDM with amplitude compensation is shown in Fig. \ref{RDM1}.
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM1.png}}}
-\caption{RDM for Given Scenario.}
+\caption{RDM after Amplitude Compensation.}
 \label{RDM1}
 \end{figure}
 \noindent
@@ -290,7 +290,7 @@ If the targets described in Section \ref{amp_comp_section} are processed using f
 the resulting RDM will be given by Fig. \ref{RDM2}.
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM2.png}}}
-\caption{RDM for Given Scenario.}
+\caption{RDM with Added Range and Doppler Windows.}
 \label{RDM2}
 \end{figure}
 \noindent
@@ -342,7 +342,7 @@ R_a = R - nR_{ua} = 200 - 150 = 50m
 This is shown in Fig. \ref{RDM3}.
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{RDM3.png}}}
-\caption{RDM for Given Scenario.}
+\caption{RDM with Target Placed in Ambiguous Location.}
 \label{RDM3}
 \end{figure}
 \noindent
@@ -406,7 +406,7 @@ v_{uas} = \frac{F_{bs}\lambda}{2} \approx 194.805m/s
 The RDM for the first CPI is shown in Fig. \ref{RDM3}, and the RDM for the second CPI is shown in Fig. \ref{multi_prf_rdm}.
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{multi_prf_rdm.png}}}
-\caption{RDM for Second CPI}
+\caption{RDM for Second CPI in Multiple CPI System.}
 \label{multi_prf_rdm}
 \end{figure}
 \noindent
