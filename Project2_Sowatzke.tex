@@ -172,7 +172,7 @@ The targets in Fig. \ref{rdm_range_doppler_compression} may be falsely interpret
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{amplitude_compensation_bd.png}}}
 \caption{RDM Generation with Amplitude Compensation.}
 \end{figure}
-Consider two targets returns that are received in the presence of thermal noise with a relative power of $0.0001$. Let the range of both targets be $10m$. Let the velocity of the first target be $15m/s$ and the velocity of the second target be $14m/s$. Finally, let the RCS of the first target be $100m^2$ and the RCS of the second target be $1m^2$. Then, the RDM with amplitude compensation is shown in Fig. \ref{rdm_amplitude_compensation}.
+Consider two targets returns that are received in the presence of thermal noise with a power of $0.0001W$. Let the range of both targets be $10m$. Let the velocity of the first target be $15m/s$ and the velocity of the second target be $14m/s$. Finally, let the RCS of the first target be $100m^2$ and the RCS of the second target be $1m^2$. Then, the RDM with amplitude compensation is shown in Fig. \ref{rdm_amplitude_compensation}.
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{rdm_amplitude_compensation.png}}}
 \caption{RDM after Amplitude Compensation.}
@@ -237,7 +237,7 @@ The unambiguous doppler shift of the system is given by the following equation:
 \begin{equation}
 F_{ua} = PRF = \frac{1}{PRI} = 50kHz
 \end{equation}
-The unambiguous velocity is defined as follows:
+This results in the following unambiguous velocity:
 \begin{equation}
 \label{vua CPI0}
 v_{ua} = \frac{PRF\cdot\lambda}{2} = \frac{\lambda}{2\cdot PRI} \approx 64.9351m/s 
@@ -246,11 +246,12 @@ If a target is at a range of $200m$ and a velocity of $80m/s$, the target will a
 \begin{equation}
 v_a = v - nv_{ua} = 80 - 1 \cdot 64.9351 \approx 15.0649m/s
 \end{equation}
-The apparent range will be
+and the apparent range will be
 \begin{equation}
 R_a = R - nR_{ua} = 200 - 150 = 50m
 \end{equation}
-This is shown in Fig. \ref{rdm_ambiguous_target}.
+If the RCS of the target return is $10000 m^2$ and the thermal noise power is $10^{-8}W$, the resulting RDM will be given by
+Fig. \ref{rdm_ambiguous_target}.
 \begin{figure}[H]
 \centerline{\fbox{\includegraphics[width=0.4\textwidth]{rdm_ambiguous_target.png}}}
 \caption{RDM with Target Placed in Ambiguous Location.}

@@ -351,10 +351,11 @@ classdef radar < handle
                 datatip(m, vm(i), Rm(i));
             end
 
+            % scale axis
             xlim([vaxis(1) vaxis(end)])
             ylim([raxis(1) raxis(end)])
 
-            % scale axis
+            % provide colorbar for RDM power in dB
             colorbar;
         
             % label plot

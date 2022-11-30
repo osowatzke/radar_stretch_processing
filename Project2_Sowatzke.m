@@ -3,7 +3,8 @@
 % Date: 12/01/2022
 %
 % Subject: Script generates input data cube for a stretch processor given 
-% sets of input parameters. Data cube is processed to form RDM and plotted.
+% sets of input parameters. Data cube is processed to form RDM. Resulting
+% RDM is then plotted.
 %
 
 % close any open figures
@@ -43,7 +44,7 @@ r = radar;
 r.generate_rdm(R,v,RCS,thermal_noise_power,en_range_win,...
     en_amp_corr,en_dopp_win);
 
-% create zoomed in figure
+% create zoomed-in figure
 ax1 = gca;
 f = figure;
 copyobj(ax1,f);
@@ -67,7 +68,7 @@ r = radar;
 r.generate_rdm(R,v,RCS,thermal_noise_power,en_range_win,...
     en_amp_corr,en_dopp_win);
 
-% create zoomed in figure
+% create zoomed-in figure
 ax1 = gca;
 f = figure;
 copyobj(ax1,f);
